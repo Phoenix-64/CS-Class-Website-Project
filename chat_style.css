@@ -1,0 +1,77 @@
+.chat_container {
+	display: grid; 
+	max-width: 80vw;
+	margin: auto;
+	grid-template-columns: 1fr 3fr; 
+	grid-template-rows: min-content; 
+	gap: 0px 0px; 
+	grid-template-areas: 
+	  "users chat"; 
+  }
+
+
+#chatbox {		
+	grid-area: chat;
+	display: grid;
+	margin: auto;
+	border:double;
+	max-width: 80vw;
+	align-items: stretch;
+	justify-content: center;
+	grid-template-columns: 1fr 1fr 1fr;
+	grid-template-rows: 4fr 1fr;
+	grid-template-areas: 
+		"chat chat chat chat"
+		"text . . . ";
+	
+}
+
+#chatarea {
+	grid-area: chat;
+	border:double;
+	overflow:auto;
+	text-align: left;
+	padding: 5px;
+	padding-right: 10px;
+	padding-left: 10px;
+}
+
+#loginperson {
+	border:double;
+	text-align: left;
+	padding: 5px;
+}
+
+#user {
+	margin-bottom: 10px;
+}
+
+#textbox {
+	grid-area: text;
+	border:double;
+}
+
+#textbox form textarea {
+	resize: none;
+	width: 40vw;
+}
+
+@media only screen and (max-width: 840px) {
+	#textbox form textarea {
+		resize: none;
+		width: 75vw;
+	}
+
+	#chatbox{
+		grid-template-areas: 
+		"chat chat chat activ"
+		"text text text text";
+	}
+}
+
+
+#chatting {
+    float:left;
+}
+
+
