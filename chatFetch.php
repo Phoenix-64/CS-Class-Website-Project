@@ -13,7 +13,12 @@ else {
     $chat_name_id = $active_chat_id . $activ_user;
     }
 
-
+//Check if table exists:
+$state = mysqli_query($conn, "SHOW TABLES LIKE '$chat_name_id'");
+if (mysqli_fetch_assoc($state) == NULL) {
+    echo("Select or request a Chat");
+    exit();
+}
 
 // Select all chat records from the 'chat' table
 $result = mysqli_query($conn, "SELECT * FROM `$chat_name_id`");

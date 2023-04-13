@@ -21,6 +21,7 @@ session_start();
 
 
   function changeRequest(element) {
+    element.style.backgroundColor = "red";
     console.log("Requested: " + element.dataset.user);
     var xhr = new XMLHttpRequest();
     xhr.open('POST', 'requestChat.php', true);
@@ -31,6 +32,7 @@ session_start();
   
   
   function acceptRequest(element) {
+    element.style.backgroundColor = "red";
     var xhr = new XMLHttpRequest();
     xhr.open('POST', 'acceptChat.php', true);
     xhr.setRequestHeader('content-type', 'application/x-www-form-urlencoded');
@@ -40,6 +42,7 @@ session_start();
 
 
   function declineRequest(element) {
+    element.style.backgroundColor = "red";
     var xhr = new XMLHttpRequest();
     console.log("activ_user: " + document.getElementById('user').dataset.user + "  declined_user: " + element.dataset.user)
     xhr.open('POST', 'declineChat.php', true);
