@@ -1,0 +1,4 @@
+[submodule "sodium-plus"]
+	path = sodium-plus
+	url = https://github.com/paragonie/sodium-plus.git
+	branch = master

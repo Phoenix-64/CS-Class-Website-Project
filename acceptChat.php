@@ -37,6 +37,10 @@
       );
 
 
+      $keypair = sodium_crypto_box_keypair();
+      $publicKey = sodium_crypto_box_publickey($keypair);
+
+
     //Create new chat by first computing name and then creating:
 
     // Compute chat name based on participating user_ids
