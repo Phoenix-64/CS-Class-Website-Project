@@ -52,6 +52,8 @@
         `chat_person_name` varchar(100) NOT NULL,
         `chat_value` varchar(100) NOT NULL,
         `chat_time` time DEFAULT NULL,
+        `message_type` INT(11) NOT NULL DEFAULT 0,
+        `image_file` varchar(100) NOT NULL,
         PRIMARY KEY (`chat_id`)
       ) ENGINE=InnoDB DEFAULT CHARSET=latin1;";
     $result = mysqli_query($conn, $query);
