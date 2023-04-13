@@ -9,6 +9,10 @@ session_start();
 
 <script>
 
+
+
+
+
   function changeActive(element) {
     element.style.backgroundColor = "red";
     var xhr = new XMLHttpRequest();
@@ -163,6 +167,28 @@ if (isset($_GET['logout'])) {
         <textarea rows="4" cols="100" id="text" onkeyup="if(event.keyCode==13) {getText()}"></textarea>
         <input type="button" value="send" onclick="getText()" />
       </form>
+
+
+
+
+      <form action="uploadHandler.php"
+      method="post"
+      enctype="multipart/form-data">
+
+        Select Image to upload:
+        <input type="file" name="fileToUpload" id="fileToUpload">
+        <input type="submit" value="Upload Image" name="submit">
+        <input type='hidden' id='activ_user' name='activ_user' value="Default">
+
+      </form>
+      <?php if( isset($_GET['error'])){ ?><?php echo $_GET['error']; }?>
+
+       <!--Script changes input field with id of active user  -->
+       <script>
+            document.getElementById('activ_user').value = document.getElementById('user').dataset.user;
+      </script>
+
+
     </div>
   </div>
   <div id="loginperson"> </div>

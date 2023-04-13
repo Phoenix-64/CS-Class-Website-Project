@@ -39,7 +39,13 @@ while ($row = mysqli_fetch_assoc($result)) {
         $align = "right";
     }
     // Print the name and message
-    echo "<span style='color: $color; float: $align;'> $time $name: $message </span><br>";
+    
+    echo "<div><span style='color: $color; float: $align;'> $time $name: $message </span></div><br>";
+    
+    if($row['message_type'] == 1) {
+        $file_name = $row['image_file'];
+        echo "<div><img src='$file_name' class='chat_image' style='float: $align; width: 30vw; padding-left: 1vw; padding-bottom: .5vw;'></div><br>";
+    }
 
 }
 ?>
