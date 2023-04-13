@@ -238,7 +238,7 @@ if(!$result){
 
 <tr>
 <td>
-Email : </td><td><input type="text" name="email"  /></td></tr><tr>
+Email : </td><td><input type="email" name="email"  /></td></tr><tr>
 <td> Password : </td><td><input type="password" name="password" /></td></tr>
 <tr><td colspan="2"><center> <input type="submit" name="loginbtn" /></td></tr></table>
 <input type='hidden' name='page' value='chat' />
