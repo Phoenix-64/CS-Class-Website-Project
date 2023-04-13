@@ -163,6 +163,18 @@ if (isset($_GET['logout'])) {
         <textarea rows="4" cols="100" id="text" onkeyup="if(event.keyCode==13) {getText()}"></textarea>
         <input type="button" value="send" onclick="getText()" />
       </form>
+
+      <form action="uploadHandler.php"
+      method="post"
+      enctype="multipart/form-data">
+
+        Select Image to upload:
+        <input type="file" name="fileToUpload" id="fileToUpload">
+        <input type="submit" value="Upload Image" name="submit">
+      </form>
+
+
+
     </div>
   </div>
   <div id="loginperson"> </div>
