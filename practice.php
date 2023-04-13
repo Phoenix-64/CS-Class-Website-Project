@@ -1,10 +1,25 @@
 <!DOCTYPE html>
 <html lang="en">
-
+<script type="text/javascript" src="sodium-plus/dist/sodium-plus.min.js"></script>
 <script>
 
 
 
+function generateKeys() {
+
+  //Generate keys and save privat to cookie and insert ublic to database
+  (async function () {
+    let sodium;
+      if (!sodium) sodium = await SodiumPlus.auto();
+      let userKeypair = await sodium.crypto_box_keypair();
+          let userSecret = await sodium.crypto_box_secretkey(userKeypair);
+          let userPublic = await sodium.crypto_box_publickey(userKeypair);
+
+      console.log(userSecret);
+      localStorage.setItem("key", JSON.stringify(userSecret));
+      
+  })();
+}
 
 
 // This function sends an HTTP GET request to the test.php file and updates the city_display element with the response

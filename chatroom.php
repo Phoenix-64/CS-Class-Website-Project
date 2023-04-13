@@ -7,9 +7,29 @@
 session_start();
 ?>
 
+<script type="text/javascript" src="sodium-plus/dist/sodium-plus.min.js"></script>
 <script>
 
 
+(async function() {
+    if (!window.sodium) window.sodium = await SodiumPlus.auto();
+
+    let aliceKeypair = await sodium.crypto_box_keypair();
+        let aliceSecret = await sodium.crypto_box_secretkey(aliceKeypair);
+        let alicePublic = await sodium.crypto_box_publickey(aliceKeypair);
+    let bobKeypair = await sodium.crypto_box_keypair();
+        let bobSecret = await sodium.crypto_box_secretkey(bobKeypair);
+        let bobPublic = await sodium.crypto_box_publickey(bobKeypair);
+    // You can now use the sodium object here.
+    
+    // Just some example code to ensure it's running:
+    let random = await sodium.randombytes_buf(32);
+    let hash = await sodium.crypto_generichash('hello world');
+    console.log({
+        'random': random.toString('hex'),
+        'hash': hash.toString('hex')
+    });
+})();
 
 
 

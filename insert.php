@@ -15,8 +15,8 @@
   // Insert the new user into the database
   $result = mysqli_query(
     $conn,
-    "INSERT INTO `user` (`user_id`, `user_name`, `user_email`, `user_password`, `user_country`, `user_status`, `user_color`, `active_chat`, `availabel_chats`, `requests`)
-     VALUES (NULL, '$name', '$email', '$password', '$country', '0', '$color', NULL, NULL, NULL)"
+    "INSERT INTO `user` (`user_id`, `user_name`, `user_email`, `user_password`, `user_country`, `user_status`, `user_color`)
+     VALUES (NULL, '$name', '$email', '$password', '$country', '0', '$color')"
   );
 
 
@@ -24,7 +24,7 @@
   if ($result) {
     // If the insert was successful, redirect to the login page with a success message
     header(
-      'location: practice.php?registeration_successfull=<span style="color:green">You have successfully registered. You can now login.</span>'
+      'location: practice.php?registeration_successfull=<span style="color:green">You have successfully registered. You can now login.</span><script>generateKeys()</script>'
     );
   } else {
     // If the insert failed, print an error message
