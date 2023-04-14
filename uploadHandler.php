@@ -70,10 +70,11 @@ if ($uploadOk == 0) {
         $chat_name_id = $active_chat_id . $activ_user;
         }
 
+    $filename_enc = $_POST['fileNameEnc'];
     $result = mysqli_query(
         $conn,
         "INSERT INTO `$chat_name_id` (`chat_id`, `chat_person_name`, `chat_value`, `chat_time`, `message_type`, `image_file`)
-         VALUES (NULL, '$_SESSION[name]', '', NOW(), 1, '$target_file')"
+         VALUES (NULL, '$_SESSION[name]', '', NOW(), 1, '$filename_enc')"
       );
 
 

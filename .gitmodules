@@ -2,3 +2,6 @@
 	path = sodium-plus
 	url = https://github.com/paragonie/sodium-plus.git
 	branch = master
+[submodule "chacha-js"]
+	path = chacha-js
+	url = https://github.com/skeeto/chacha-js

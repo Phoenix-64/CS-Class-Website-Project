@@ -9,12 +9,15 @@
   if (isset($_POST['activ_user'])) {
     $active_user = $_POST['activ_user'];
     $accepted_user = $_POST['accepted_user'];
+    $N_public = $_POST['N_public'];
+    $key_enc = $_POST['key_enc'];
+    $iv_enc = $_POST['iv_enc'];
 
     $result = mysqli_fetch_assoc(mysqli_query($conn , "SELECT * FROM user WHERE user.user_id='$active_user'"));
 
     //Get current requests and remove old one
     $current_request = $result['requests'];
-    $new_requests = str_replace(";" . $accepted_user,"", $current_request);
+    $new_requests = str_replace(";" . $accepted_user . ":" . $N_public,"", $current_request);
 
     //Get and change availabelchats
     $current_availabel = $result['availabel_chats'];
@@ -37,9 +40,6 @@
       );
 
 
-      $keypair = sodium_crypto_box_keypair();
-      $publicKey = sodium_crypto_box_publickey($keypair);
-
 
     //Create new chat by first computing name and then creating:
 
@@ -50,6 +50,7 @@
         else {
         $chat_name_id = $accepted_user . $active_user;
         }
+    echo("$chat_name_id");
 
     $query = "CREATE TABLE IF NOT EXISTS `$chat_name_id` (
         `chat_id` INT(11) NOT NULL AUTO_INCREMENT,
@@ -61,5 +62,17 @@
         PRIMARY KEY (`chat_id`)
       ) ENGINE=InnoDB DEFAULT CHARSET=latin1;";
     $result = mysqli_query($conn, $query);
+
+    //set first message to iv and key
+    $result = mysqli_query(
+      $conn,
+      "INSERT INTO `$chat_name_id` (`chat_id`, `chat_person_name`, `chat_value`, `chat_time`, `message_type`)
+       VALUES (NULL, '$_SESSION[name]', '$key_enc', NOW(), 2)"
+    );
+    $result = mysqli_query(
+      $conn,
+      "INSERT INTO `$chat_name_id` (`chat_id`, `chat_person_name`, `chat_value`, `chat_time`, `message_type`)
+       VALUES (NULL, '$_SESSION[name]', '$iv_enc', NOW(), 3)"
+    );
   }
 ?>

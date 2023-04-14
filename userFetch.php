@@ -28,7 +28,7 @@ echo($current_user['requests']);
 $active_chat = $current_user['active_chat'];
 //Fetch availabel chats and requests that other users made to the active ones
 $availabel_chats = explode(";",$current_user['availabel_chats']);
-$requests_for_active = explode(";",$current_user['requests']);
+$requests_for_active = $current_user['requests'];
 
 //If array is NULL initialize to [];
 if($availabel_chats == NULL) {
@@ -37,7 +37,7 @@ if($availabel_chats == NULL) {
 
 while ($row = mysqli_fetch_assoc($result)){
 	$user_id = $row['user_id'];
-	$requests = explode(";", $row['requests']);
+	$requests = $row['requests'];
 	//skip if active user
 	if($active_user == $user_id) {
 		continue;
@@ -74,7 +74,7 @@ while ($row = mysqli_fetch_assoc($result)){
 			
 		}
 	//If there is already a request dont show reauest button
-	elseif(in_array($active_user, $requests)) {
+	elseif(str_contains($requests, ";" . $active_user)) {
 		//Check if user is Online
 		if($row['user_status'] == 1){
 			echo "<div id='user'>
@@ -89,7 +89,7 @@ while ($row = mysqli_fetch_assoc($result)){
 			}
 		}
 	//If the current user has a request from this id display butons
-	elseif(in_array($user_id, $requests_for_active)) {
+	elseif(str_contains($requests_for_active, ";" . $user_id)) {
 		//Check if user is Online
 		if($row['user_status'] == 1){
 			echo "<div id='user'>

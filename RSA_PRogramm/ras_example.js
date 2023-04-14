@@ -9,24 +9,26 @@ const first_primes_list = [3,5,7,11,13,17,19,23,29,31,37,41,43,47,53,59,61,67,71
     ,787,797,809,811,821,823,827,829,839,853,857,859,863,877,881,883
     ,887,907,911,919,929,937,941,947,953,967,971,977,983,991,997]
 
+const pad_seperator = 112313n
+const e = 65537n
 
-function euler(p, q) {
-    return (p - 1n) * (q - 1n);
-}
-
-function egcd(a,b) {
-    console.log(a, b)
-    if (a < b) [a,b] = [b, a];
-    let s = 0n, old_s = 1n;
-    let t = 1n, old_t = 0n;
-    let r = b, old_r = a;
-    while (r != 0n) {
-        let q = old_r/r;
-        [r, old_r] = [old_r - q*r, r];
-        [s, old_s] = [old_s - q*s, s];
-        [t, old_t] = [old_t - q*t, t];
+    function euler(p, q) {
+        return (p - 1n) * (q - 1n);
     }
-    console.log("Bezout coef: ", old_s, old_t);
+
+    function egcd(a,b) {
+        console.log(a, b)
+        if (a < b) [a,b] = [b, a];
+        let s = 0n, old_s = 1n;
+        let t = 1n, old_t = 0n;
+        let r = b, old_r = a;
+        while (r != 0n) {
+            let q = old_r/r;
+            [r, old_r] = [old_r - q*r, r];
+            [s, old_s] = [old_s - q*s, s];
+            [t, old_t] = [old_t - q*t, t];
+        }
+        console.log("Bezout coef: ", old_s, old_t);
     console.log("GCD: ", old_r);
     console.log("Quot by GCD: ", s, t);
     // old_s is k and old_t is d
@@ -216,7 +218,6 @@ let N = p * q
 let Nphi = euler(p, q);
 // 1 < e < Nphi - 1 and 
 //let e = findCoprime(N)
-let e = 65537n
 
 // e and N are the public key
 // d is the privat key
@@ -260,7 +261,7 @@ let coded_message = Array.from(enc.encode(chat_message));
 
 
 
-let pad_seperator = 112313n
+
 for (i in coded_message) {
 
 

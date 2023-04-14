@@ -6,13 +6,13 @@
   include_once('config.php');
 
   // Check if the chat form was submitted
-  if (isset($_POST['activ_user'])) {  
-    $active_user = $_POST['activ_user'];
-    $active_chat = $_POST['active_chat'];
+  if (isset($_POST['activ_user_name'])) {
+    $active_user_name = $_POST['activ_user_name'];
+    $N = $_POST['N_public'];
     // Insert the new chat message into the database
     $result = mysqli_query(
       $conn,
-      "UPDATE `user` SET `active_chat`= $active_chat WHERE `user_id`='$active_user'" 
+      "UPDATE `user` SET `N_public` = $N WHERE `user_name`='$active_user_name'" 
     );
   }
 ?>

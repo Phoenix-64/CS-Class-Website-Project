@@ -1,6 +1,7 @@
 <?php
 include_once('config.php');
-
+//echo("Empty");
+//echo("Epty2");
 
 $activ_user = $_POST['activ_user'];
 $active_user_result =mysqli_fetch_assoc(mysqli_query($conn, "SELECT * FROM user WHERE user.user_id ='$activ_user'"));
@@ -39,12 +40,25 @@ while ($row = mysqli_fetch_assoc($result)) {
         $align = "right";
     }
     // Print the name and message
-    
-    echo "<div><span style='color: $color; float: $align;'> $time $name: $message </span></div><br>";
-    
-    if($row['message_type'] == 1) {
-        $file_name = $row['image_file'];
-        echo "<div><img src='$file_name' class='chat_image' style='float: $align; width: 30vw; padding-left: 1vw; padding-bottom: .5vw;'></div><br>";
+    switch($row['message_type']) {
+        case 0:
+            echo "$color;$align;$time;$name;$message:::";
+            break;
+        case 1:
+            $file_name = $row['image_file'];
+            echo "$color;$align;$time;$name;$message;$file_name:::";
+            break;
+        case 2:
+            //key
+            echo "key1241242:$message";
+            $remove = mysqli_query($conn, "DELETE FROM `$chat_name_id` WHERE `message_type` = 2");
+            break;
+        case 3:
+            //iv
+            echo "iv1241242:$message";
+            $remove = mysqli_query($conn, "DELETE FROM `$chat_name_id` WHERE `message_type` = 3");
+            break;
+
     }
 
 }

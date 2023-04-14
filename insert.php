@@ -24,7 +24,7 @@
   if ($result) {
     // If the insert was successful, redirect to the login page with a success message
     header(
-      'location: practice.php?registeration_successfull=<span style="color:green">You have successfully registered. You can now login.</span><script>generateKeys()</script>'
+      "location: practice.php?registeration_successfull=<span style='color:green'>You have successfully registered. You can now login.</span>"
     );
   } else {
     // If the insert failed, print an error message
