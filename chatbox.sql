@@ -75,6 +75,11 @@ CREATE TABLE IF NOT EXISTS `user` (
   `user_country` varchar(100) NOT NULL,
   `user_status` varchar(100) NOT NULL DEFAULT '0',
   `user_color` varchar(100) NOT NULL DEFAULT '#00FF00',
+  `active_chat` int(11) NULL DEFAULT NULL,
+  `availabel_chat`TEXT NULL DEFAULT NULL,
+  `requests` TEXT NULL DEFAULT NULL,
+  `N_public`BIGINT NULL DEFAULT NULL,
+  `pw_reset`TEXT NOT NULL,
   PRIMARY KEY (`user_id`),
   UNIQUE KEY `UX_Constraint` (`user_email`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;

@@ -44,7 +44,7 @@ use League\OAuth2\Client\Provider\Google;
 use Hayageek\OAuth2\Client\Provider\Yahoo;
 //@see https://github.com/stevenmaguire/oauth2-microsoft
 use Stevenmaguire\OAuth2\Client\Provider\Microsoft;
- 
+include_once("config.php"); 
 if (!isset($_GET['code']) && !isset($_GET['provider'])) {
     ?>
 <html>
@@ -60,7 +60,6 @@ if (!isset($_GET['code']) && !isset($_GET['provider'])) {
  
 require 'vendor/autoload.php';
 require_once 'class-db.php';
- 
 session_start();
  
 $providerName = '';
@@ -77,9 +76,8 @@ if (!in_array($providerName, ['Google', 'Microsoft', 'Yahoo'])) {
  
 //These details are obtained by setting up an app in the Google developer console,
 //or whichever provider you're using.
-$clientId = '475866746761-fhl8qdnqdkesnhsfqcsdmot0hbl7d14l.apps.googleusercontent.com';
-$clientSecret = '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';
- 
+
+
 //If this automatic URL doesn't work, set it yourself manually to the URL of this script
 $redirectUri = (isset($_SERVER['HTTPS']) ? 'https://' : 'http://') . $_SERVER['HTTP_HOST'] . $_SERVER['PHP_SELF'];
 //$redirectUri = 'http://localhost/PHPMailer/redirect';

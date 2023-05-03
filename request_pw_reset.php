@@ -21,9 +21,7 @@ $mail->SMTPSecure = PHPMailer::ENCRYPTION_SMTPS;
 $mail->SMTPAuth = true;
 $mail->AuthType = 'XOAUTH2';
  
-$email = 'phoenix.email.bot@gmail.com'; // the email used to register google app
-$clientId = '475866746761-fhl8qdnqdkesnhsfqcsdmot0hbl7d14l.apps.googleusercontent.com';
-$clientSecret = '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';
+
  
 $db = new DB();
 $refreshToken = $db->get_refersh_token();
@@ -44,20 +42,53 @@ $mail->setOAuth(
             'clientId' => $clientId,
             'clientSecret' => $clientSecret,
             'refreshToken' => $refreshToken,
-            'userName' => $email,
+            'userName' => $clientemail,
         ]
     )
 );
- 
-$mail->setFrom($email, 'Pheonixes Website Emailer');
-$mail->addAddress('piosbenni@gmail.com', 'Phoenix 64');
+
+
+
+function generateRandomString($length = 10) {
+    $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+    $charactersLength = strlen($characters);
+    $randomString = '';
+    for ($i = 0; $i < $length; $i++) {
+        $randomString .= $characters[random_int(0, $charactersLength - 1)];
+    }
+    return $randomString;
+}
+
+//Get user data and create reset link
+$user_email = $_POST['email'];
+$user_reset_string = generateRandomString(23);
+
+$query = mysqli_query(
+    $conn,
+    "UPDATE user SET pw_reset='$user_reset_string' WHERE user_email='$user_email'"
+  );
+
+
+$mail->setFrom($clientemail, 'Pheonixes Website Emailer');
+$mail->addAddress($user_email, 'The User');
 $mail->isHTML(true);
-$mail->Subject = 'Test Website Email';
-$mail->Body = '<b>Email Body Test</b>';
+$mail->Subject = 'Phoenixes Website password reset';
+$mail->Body = "<b>If you requested the link proced with the password reset otherwise disregard it: https://localhost/myTestWebapp/pw_reset.php?email=$user_email&string=$user_reset_string</b>";
  
 //send the message, check for errors
 if (!$mail->send()) {
     echo 'Mailer Error: ' . $mail->ErrorInfo;
+    header(
+        'location: practice.php?login_error=<span style="color:red">Reset Email could not be send contact developer.</span>'
+      );
 } else {
     echo 'Message sent!';
+    header(
+        'location: practice.php?login_error=<span style="color:green">Check your emails and spam folder reset Email should have been send.</span>'
+      );
 }
+?>
+
+
+
+
