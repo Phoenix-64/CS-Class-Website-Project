@@ -12,8 +12,11 @@
     $N_public = $_POST['N_public'];
     $key_enc = $_POST['key_enc'];
     $iv_enc = $_POST['iv_enc'];
-
-    $result = mysqli_fetch_assoc(mysqli_query($conn , "SELECT * FROM user WHERE user.user_id='$active_user'"));
+    
+    $stmt = $db->prepare("SELECT * FROM users WHERE user_id = ?");
+    $stmt->bind_param("i", $active_user);
+    $stmt->execute();
+    $result = $stmt->get_result();
 
     //Get current requests and remove old one
     $current_request = $result['requests'];
@@ -24,31 +27,36 @@
     $new_availabel = $current_availabel . ";" . $accepted_user;
 
     // Update users requests and add to availabel chats
-    $update = mysqli_query(
-      $conn,
-      "UPDATE `user` SET `requests`= '$new_requests', `availabel_chats`='$new_availabel' WHERE `user_id`='$active_user'" 
-    );
+
+    $sql = "UPDATE user SET requests=?, availabel_chats=? WHERE user_id=?";
+    $stmt_upd= $conn->prepare($sql);
+    $stmt_upd->bind_param("ssi", $new_requests, $new_availabel, $active_user);
+    $stmt_upd->execute();
 
 
     //Generate new avialabel for accepted:
-    $result = mysqli_fetch_assoc(mysqli_query($conn , "SELECT * FROM user WHERE user.user_id='$accepted_user'"));
+    $stmt->bind_param("i", $accepted_user);
+    $stmt->execute();
+    $result = $stmt->get_result();
+
     $current_availabel = $result['availabel_chats'];
     $new_availabel = $current_availabel . ";" . $active_user;
-    $update = mysqli_query(
-        $conn,
-        "UPDATE `user` SET  `availabel_chats`='$new_availabel' WHERE `user_id`='$accepted_user'" 
-      );
 
+
+    $sql = "UPDATE user SET availabel_chats=? WHERE user_id=?";
+    $stmt_upd= $conn->prepare($sql);
+    $stmt_upd->bind_param("si", $new_availabel, $accepted_user);
+    $stmt_upd->execute();
 
 
     //Create new chat by first computing name and then creating:
 
     // Compute chat name based on participating user_ids
     if ($active_user < $accepted_user) {
-        $chat_name_id = $active_user . $accepted_user;
+        $chat_name_id = mysqli_real_escape_string($active_user . $accepted_user);
         }
         else {
-        $chat_name_id = $accepted_user . $active_user;
+        $chat_name_id = mysqli_real_escape_string($accepted_user . $active_user);
         }
     echo("$chat_name_id");
 
@@ -64,15 +72,12 @@
     $result = mysqli_query($conn, $query);
 
     //set first message to iv and key
-    $result = mysqli_query(
-      $conn,
-      "INSERT INTO `$chat_name_id` (`chat_id`, `chat_person_name`, `chat_value`, `chat_time`, `message_type`)
-       VALUES (NULL, '$_SESSION[name]', '$key_enc', NOW(), 2)"
-    );
-    $result = mysqli_query(
-      $conn,
-      "INSERT INTO `$chat_name_id` (`chat_id`, `chat_person_name`, `chat_value`, `chat_time`, `message_type`)
-       VALUES (NULL, '$_SESSION[name]', '$iv_enc', NOW(), 3)"
-    );
+    $stmt = $db->prepare("INSERT INTO `$chat_name_id` (chat_id, chat_person_name, chat_value, chat_time, message_type) 
+                          VALUES (NULL,?, ?, NOW(), ?");
+    $stmt->bind_param("ssi", $_SESSION["name"], $key_enc, 2);
+    $stmt->execute();
+    $stmt->bind_param("ssi", $_SESSION["name"], $iv_enc, 3);
+    $stmt->execute();
+
   }
 ?>

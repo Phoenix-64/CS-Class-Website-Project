@@ -67,6 +67,10 @@ $query = mysqli_query(
     $conn,
     "UPDATE user SET pw_reset='$user_reset_string' WHERE user_email='$user_email'"
   );
+$stmt = $db->prepare("UPDATE user SET pw_reset=? WHERE user_email=?");
+$stmt->bind_param("ss", $user_reset_string, $user_email);
+$stmt->execute();
+
 
 
 $mail->setFrom($clientemail, 'Pheonixes Website Emailer');

@@ -8,14 +8,14 @@
   $email = $_POST['emailadress'];
   $password = password_hash($password, PASSWORD_ARGON2I);
   // Insert the new user into the database
-  $result = mysqli_query(
-    $conn,
-    "UPDATE user SET `user_password`='$password' WHERE `user_email`='$email'"
-  );
+
+  $stmt= $conn->prepare("UPDATE user SET user_password=? WHERE user_email=?");
+  $stmt->bind_param("ss", $password, $email);
+  $stmt->execute();
 
 
   // Check if the insert was successful
-  if ($result) {
+  if ($stmt->errno == 0) {
     // If the insert was successful, redirect to the login page with a success message
     header(
       'location: practice.php?login_error=<span style="color:green">Your password was sucsesfully reset</span>'

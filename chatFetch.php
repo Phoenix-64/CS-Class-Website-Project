@@ -4,25 +4,36 @@ include_once('config.php');
 //echo("Epty2");
 
 $activ_user = $_POST['activ_user'];
-$active_user_result =mysqli_fetch_assoc(mysqli_query($conn, "SELECT * FROM user WHERE user.user_id ='$activ_user'"));
+$stmt = $db->prepare("SELECT * FROM user WHERE user_id=?");
+$stmt->bind_param("i", $activ_user);
+$stmt->execute();
+$result = $stmt->get_result();
+$active_user_result = $result->fetch_assoc();
+
 $active_chat_id = $active_user_result['active_chat'];
 
 if ($activ_user < $active_chat_id) {
-    $chat_name_id = $activ_user . $active_chat_id;
+    $chat_name_id = mysqli_real_escape_string($activ_user . $active_chat_id);
     }
 else {
-    $chat_name_id = $active_chat_id . $activ_user;
+    $chat_name_id = mysqli_real_escape_string($active_chat_id . $activ_user);
     }
 
 //Check if table exists:
-$state = mysqli_query($conn, "SHOW TABLES LIKE '$chat_name_id'");
-if (mysqli_fetch_assoc($state) == NULL) {
+$stmt = $db->prepare("SHOW TABLES LIKE ?");
+$stmt->bind_param("s", $chat_name_id);
+$stmt->execute();
+$result = $stmt->get_result();
+$state = $result->fetch_assoc();
+if ($state == NULL) {
     echo("Select or request a Chat");
     exit();
 }
 
 // Select all chat records from the 'chat' table
 $result = mysqli_query($conn, "SELECT * FROM `$chat_name_id`");
+$stmt = $db->prepare("SELECT * FROM user WHERE user_name = ?");
+
 
 // Loop through each chat record
 while ($row = mysqli_fetch_assoc($result)) {
@@ -31,9 +42,12 @@ while ($row = mysqli_fetch_assoc($result)) {
     $message = $row['chat_value'];
     $time = $row['chat_time'];
 
-    $user = mysqli_query($conn, "SELECT *FROM user WHERE user.user_name='$name'"
-    );
-    $color = mysqli_fetch_assoc($user)['user_color'];
+
+    $stmt->bind_param("s", $name);
+    $stmt->execute();
+    $user = $stmt->get_result();
+    $user_row = $result->fetch_assoc();
+    $color = $user_row['user_color'];
     
     $align = "left";
     if ($name == $active_user_result["user_name"]) {

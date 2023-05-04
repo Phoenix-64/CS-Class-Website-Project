@@ -77,12 +77,12 @@ function checkPasswordMatch() {
 
 $email = $_GET['email'];
 $string = $_GET['string'];
-$result = mysqli_query(
-    $conn,
-    "SELECT * FROM user WHERE user_email='$email'"
-  ); 
-$row = mysqli_fetch_assoc($result);
 
+$stmt = $db->prepare("SELECT * FROM users WHERE user_email = ?");
+$stmt->bind_param("s", $email);
+$stmt->execute();
+$result = $stmt->get_result();
+$row = $result->fetch_assoc();
 $saved_string = $row['pw_reset'];
 
 if($saved_string !== $string) {

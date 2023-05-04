@@ -10,9 +10,8 @@
     $active_user_name = $_POST['activ_user_name'];
     $N = $_POST['N_public'];
     // Insert the new chat message into the database
-    $result = mysqli_query(
-      $conn,
-      "UPDATE `user` SET `N_public` = $N WHERE `user_name`='$active_user_name'" 
-    );
+    $stmt= $conn->prepare("UPDATE user SET N_public=? WHERE user_name=?");
+    $stmt->bind_param("ss", $N, $active_user_name);
+    $stmt->execute();
   }
 ?>

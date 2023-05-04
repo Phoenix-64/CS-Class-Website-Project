@@ -4,7 +4,10 @@
 session_start();
 include_once('config.php');
 if (isset($_GET['logout'])) {
-  $result = mysqli_query($conn, "UPDATE user SET user_status = '0' WHERE user_email = '$_SESSION[email]';");
+  $sql = "UPDATE user SET user_status='0' WHERE user_email=?";
+  $stmt= $conn->prepare($sql);
+  $stmt->bind_param("s", $_SESSION["email"]);
+  $stmt->execute();
   session_destroy();
   header('location: practice.php?logout_successfully=<span style="color:green">You have successfully Logged Out.</span>');
 }
@@ -350,7 +353,13 @@ if (isset($_GET['logout'])) {
   <script type="text/javascript">cookie_notice();</script>
   <?php
   $name = $_SESSION['name'];
-  $result = mysqli_fetch_assoc(mysqli_query($conn, "SELECT * FROM user WHERE user_email = '$_SESSION[email]';"));
+
+  $stmt = $db->prepare("SELECT * FROM user WHERE user_email = ?");
+  $stmt->bind_param("s", $_SESSION["email"]);
+  $stmt->execute();
+  $result = $stmt->get_result();
+  $result = $result->fetch_assoc();
+
   $user_id = $result['user_id'];
   $activ_chat = $result['active_chat'];
   echo "Aktueller Benutzer: <span id='user' data-activ='$activ_chat' data-user='$user_id'>$name</span>";
