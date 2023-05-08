@@ -75,6 +75,11 @@ CREATE TABLE IF NOT EXISTS `user` (
   `user_country` varchar(100) NOT NULL,
   `user_status` varchar(100) NOT NULL DEFAULT '0',
   `user_color` varchar(100) NOT NULL DEFAULT '#00FF00',
+  `active_chat` int(11) NULL DEFAULT NULL,
+  `availabel_chat`TEXT NULL DEFAULT NULL,
+  `requests` TEXT NULL DEFAULT NULL,
+  `N_public`BIGINT NULL DEFAULT NULL,
+  `pw_reset`TEXT NOT NULL,
   PRIMARY KEY (`user_id`),
   UNIQUE KEY `UX_Constraint` (`user_email`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
@@ -86,3 +91,9 @@ CREATE TABLE IF NOT EXISTS `user` (
 /*!40101 SET SQL_MODE=IFNULL(@OLD_SQL_MODE, '') */;
 /*!40014 SET FOREIGN_KEY_CHECKS=IF(@OLD_FOREIGN_KEY_CHECKS IS NULL, 1, @OLD_FOREIGN_KEY_CHECKS) */;
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
+CREATE TABLE IF NOT EXISTS`google_oauth` (
+ `id` int(11) NOT NULL AUTO_INCREMENT,
+ `provider` varchar(255) NOT NULL,
+ `provider_value` text NOT NULL,
+ PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;

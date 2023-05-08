@@ -2,10 +2,14 @@
 $name = $_GET['name'];
 //echo $email;
 include_once('config.php');
-$result = mysqli_query ($conn , "SELECT * FROM ajaxdb.user WHERE user_name = '".$name."'");
-$rows = mysqli_num_rows($result);
+
+$stmt = $db->prepare("SELECT * FROM user WHERE user_name = ?");
+$stmt->bind_param("s", $name);
+$stmt->execute();
+$result = $stmt->get_result();
+
 //echo $rows;
-if($rows > 0 )
+if($result->num_rows > 0 )
 {
 	echo "<font color='#FF0000'>Name bereits vergeben</font>";
 

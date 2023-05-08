@@ -11,7 +11,11 @@
     $active_user = $_POST['activ_user'];
     $declined_user = $_POST['declined_user'];
 
-    $result = mysqli_fetch_assoc(mysqli_query($conn , "SELECT * FROM user WHERE user.user_id='$active_user'"));
+    $stmt = $db->prepare("SELECT * FROM user WHERE user_id = ?");
+    $stmt->bind_param("i", $active_user);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    $result = $result->fetch_assoc();
     //Get current requests and remove old one
     $current_request = $result['requests'];
     echo($current_request);
@@ -22,5 +26,8 @@
       $conn,
       "UPDATE `user` SET `requests`= '$new_requests' WHERE `user_id`='$active_user'" 
     );
+    $stmt= $conn->prepare("UPDATE user SET requests=? WHERE user_id=?");
+    $stmt->bind_param("si", $new_requests, $active_user);
+    $stmt->execute();
   }
 ?>

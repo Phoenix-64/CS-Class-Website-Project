@@ -12,7 +12,14 @@ echo("Request_started");
     $requested_user = $_POST['requested_user'];
     $N_public = $_POST['N_public'];
     //Get current requests and append new one
-    $current = mysqli_fetch_assoc(mysqli_query($conn , "SELECT `requests` FROM user WHERE user.user_id='$requested_user'"))['requests'];
+
+    $stmt = $db->prepare("SELECT requests FROM user WHERE user_id = ?");
+    $stmt->bind_param("i", $requested_user);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    $row = $result->fetch_assoc();
+    $current = $row['requests'];
+
     echo($current);
     $new_requests = $current . ";" . $active_user . ":" . $N_public;
     // Update users requests
@@ -20,5 +27,8 @@ echo("Request_started");
       $conn,
       "UPDATE `user` SET `requests`= '$new_requests' WHERE `user_id`='$requested_user'" 
     );
+    $stmt= $conn->prepare("UPDATE user SET requests=? WHERE user_id=?");
+    $stmt->bind_param("si", $new_requests, $requested_user);
+    $stmt->execute();
   }
 ?>

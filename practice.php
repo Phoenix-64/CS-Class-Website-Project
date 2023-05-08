@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="en">
-<script type="text/javascript" src="RSA_PRogramm/ras_example.js"></script>
 <script>
 
 
@@ -241,10 +240,9 @@ Email : </td><td><input type="email" name="email"  /></td></tr><tr>
 <td> Password : </td><td><input type="password" name="password" /></td></tr>
 <tr><td colspan="2"><center> <input type="submit" name="loginbtn" /></td></tr></table>
 <input type='hidden' name='page' value='chat' />
-<?php if( isset($_GET['login_error'])){ ?><?php echo $_GET['login_error']; ?>
-<?php } ?>
 </form> 
-
+<?php if( isset($_GET['login_error'])){ ?><?php echo ($_GET['login_error']); ?>
+<?php } ?>
 </div>
 </div>
 <div><hr></div>

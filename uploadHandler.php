@@ -58,24 +58,29 @@ if ($uploadOk == 0) {
 
     //Insert  file name into database
     $activ_user = $_POST['activ_user'];
-    $active_user_result = mysqli_fetch_assoc(mysqli_query($conn, "SELECT * FROM user WHERE user.user_id ='$activ_user'"));
+    $stmt = $db->prepare("SELECT * FROM user WHERE user_id = ?");
+    $stmt->bind_param("i", $activ_user);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    $active_user_result = $result->fetch_assoc();
     $active_chat_id = $active_user_result['active_chat'];
 
 
 
     if ($activ_user < $active_chat_id) {
-        $chat_name_id = $activ_user . $active_chat_id;
+        $chat_name_id = mysqli_real_escape_string($conn, $activ_user . $active_chat_id);
         }
       else {
-        $chat_name_id = $active_chat_id . $activ_user;
+        $chat_name_id = mysqli_real_escape_string($conn, $active_chat_id . $activ_user);
         }
 
     $filename_enc = $_POST['fileNameEnc'];
-    $result = mysqli_query(
-        $conn,
-        "INSERT INTO `$chat_name_id` (`chat_id`, `chat_person_name`, `chat_value`, `chat_time`, `message_type`, `image_file`)
-         VALUES (NULL, '$_SESSION[name]', '', NOW(), 1, '$filename_enc')"
-      );
+    
+    $stmt = $db->prepare("INSERT INTO `$chat_name_id` (chat_id, chat_person_name, chat_value, chat_time, message_type, image_file
+                          VALUES (NULL,?,'',NOW(),1,?)");
+    $stmt->bind_param("ss", $_SESSION["name"], $filename_enc);
+    $stmt->execute();
+
 
 
   } 
