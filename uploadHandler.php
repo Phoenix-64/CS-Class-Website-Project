@@ -68,10 +68,10 @@ if ($uploadOk == 0) {
 
 
     if ($activ_user < $active_chat_id) {
-        $chat_name_id = mysqli_real_escape_string($activ_user . $active_chat_id);
+        $chat_name_id = mysqli_real_escape_string($conn, $activ_user . $active_chat_id);
         }
       else {
-        $chat_name_id = mysqli_real_escape_string($active_chat_id . $activ_user);
+        $chat_name_id = mysqli_real_escape_string($conn, $active_chat_id . $activ_user);
         }
 
     $filename_enc = $_POST['fileNameEnc'];

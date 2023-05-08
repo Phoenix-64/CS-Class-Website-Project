@@ -19,10 +19,10 @@ echo("Chat poste triggered");
 
     // Compute chat name based on participating user_ids
     if ($activ_user < $active_chat_id) {
-      $chat_name_id = mysqli_real_escape_string($activ_user . $active_chat_id);
+      $chat_name_id = mysqli_real_escape_string($conn, $activ_user . $active_chat_id);
       }
     else {
-      $chat_name_id = mysqli_real_escape_string($active_chat_id . $activ_user);
+      $chat_name_id = mysqli_real_escape_string($conn, $active_chat_id . $activ_user);
       }
     echo("Intersting: " . $_SESSION['name']. $_POST['chat'] . "   Chat name id" . $chat_name_id);
       

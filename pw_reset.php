@@ -78,7 +78,7 @@ function checkPasswordMatch() {
 $email = $_GET['email'];
 $string = $_GET['string'];
 
-$stmt = $db->prepare("SELECT * FROM users WHERE user_email = ?");
+$stmt = $db->prepare("SELECT * FROM user WHERE user_email = ?");
 $stmt->bind_param("s", $email);
 $stmt->execute();
 $result = $stmt->get_result();

@@ -9,7 +9,7 @@ $stmt->execute();
 $result = $stmt->get_result();
 
 //echo $rows;
-if($stmt->num_rows > 0 )
+if($result->num_rows > 0 )
 {
 	echo "<font color='#FF0000'>Name bereits vergeben</font>";
 

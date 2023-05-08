@@ -10,15 +10,15 @@ $stmt = $db->prepare("SELECT * FROM user WHERE user_id = ?");
 $stmt->bind_param("i", $active_user);
 $stmt->execute();
 $result_current = $stmt->get_result();
-$current_user = $result->fetch_assoc();
+$current_user = $result_current->fetch_assoc();
 
 
 
 $new_requests = $current_user['requests'] . ";" . $active_user;
 
 if (isset($_POST['activ_user'])) {
-echo($new_requests);
-echo($current_user['requests']);
+//echo($new_requests);
+//echo($current_user['requests']);
 
 
 //$update = mysqli_query(

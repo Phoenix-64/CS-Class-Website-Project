@@ -13,19 +13,15 @@ $active_user_result = $result->fetch_assoc();
 $active_chat_id = $active_user_result['active_chat'];
 
 if ($activ_user < $active_chat_id) {
-    $chat_name_id = mysqli_real_escape_string($activ_user . $active_chat_id);
+    $chat_name_id = mysqli_real_escape_string($conn, $activ_user . $active_chat_id);
     }
 else {
-    $chat_name_id = mysqli_real_escape_string($active_chat_id . $activ_user);
+    $chat_name_id = mysqli_real_escape_string($conn, $active_chat_id . $activ_user);
     }
 
 //Check if table exists:
-$stmt = $db->prepare("SHOW TABLES LIKE ?");
-$stmt->bind_param("s", $chat_name_id);
-$stmt->execute();
-$result = $stmt->get_result();
-$state = $result->fetch_assoc();
-if ($state == NULL) {
+$state = mysqli_query($conn, "SHOW TABLES LIKE '$chat_name_id'");
+if (mysqli_fetch_assoc($state) == NULL) {
     echo("Select or request a Chat");
     exit();
 }
@@ -46,7 +42,7 @@ while ($row = mysqli_fetch_assoc($result)) {
     $stmt->bind_param("s", $name);
     $stmt->execute();
     $user = $stmt->get_result();
-    $user_row = $result->fetch_assoc();
+    $user_row = $user->fetch_assoc();
     $color = $user_row['user_color'];
     
     $align = "left";

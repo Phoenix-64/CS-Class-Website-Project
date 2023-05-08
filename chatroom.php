@@ -221,7 +221,7 @@ if (isset($_GET['logout'])) {
     xhr.setRequestHeader('content-type', 'application/x-www-form-urlencoded');
     xhr.send('activ_user=' + document.getElementById('user').dataset.user);
     xhr.onreadystatechange = function() { all_echo = xhr.responseText
-      
+
       if (!(typeof all_echo === 'string' && all_echo.length === 0)) {
         all_echo = all_echo.split(":::")
         let display = []

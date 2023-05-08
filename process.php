@@ -12,7 +12,7 @@
 
 
   // Select the user with the matching email
-  $stmt = $db->prepare("SELECT * FROM user WHERE user_email = ?");
+  $stmt = $db->prepare("SELECT * FROM user WHERE user.user_email = ?");
   $stmt->bind_param("s", $email);
   $stmt->execute();
   $result = $stmt->get_result();
@@ -23,7 +23,7 @@
   $password_hash = $row['user_password'];
 
   // Check if a user was found
-  if ($stmt->num_rows > 0 && password_verify($password, $password_hash)) {
+  if ($result->num_rows > 0 && password_verify($password, $password_hash)) {
     
       // If a user was found and password is corect, set session variables and redirect to the chatroom
       echo "success";

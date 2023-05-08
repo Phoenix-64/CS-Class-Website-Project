@@ -13,10 +13,11 @@
     $key_enc = $_POST['key_enc'];
     $iv_enc = $_POST['iv_enc'];
     
-    $stmt = $db->prepare("SELECT * FROM users WHERE user_id = ?");
+    $stmt = $db->prepare("SELECT * FROM user WHERE user_id = ?");
     $stmt->bind_param("i", $active_user);
     $stmt->execute();
     $result = $stmt->get_result();
+    $result = $result->fetch_assoc();
 
     //Get current requests and remove old one
     $current_request = $result['requests'];
@@ -53,10 +54,10 @@
 
     // Compute chat name based on participating user_ids
     if ($active_user < $accepted_user) {
-        $chat_name_id = mysqli_real_escape_string($active_user . $accepted_user);
+        $chat_name_id = mysqli_real_escape_string($conn, $active_user . $accepted_user);
         }
         else {
-        $chat_name_id = mysqli_real_escape_string($accepted_user . $active_user);
+        $chat_name_id = mysqli_real_escape_string($conn, $accepted_user . $active_user);
         }
     echo("$chat_name_id");
 
