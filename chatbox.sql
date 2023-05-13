@@ -97,3 +97,12 @@ CREATE TABLE IF NOT EXISTS`google_oauth` (
  `provider_value` text NOT NULL,
  PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+CREATE TABLE IF NOT EXISTS`groupchats` (
+  `groupchat_id` INT NOT NULL AUTO_INCREMENT, 
+  `groupchat_name` VARCHAR(100) NOT NULL , 
+  `groupchat_Npublic` TEXT NOT NULL , 
+  `groupchat_users` TEXT NOT NULL , 
+  `groupchat_creator` int(11) NOT NULL , 
+  PRIMARY KEY (`groupchat_id`)
+  ) ENGINE = InnoDB DEFAULT CHARSET=latin1; 

@@ -81,6 +81,22 @@
     float:left;
 }
 
+.group_container {
+	width: max-content;
+	margin: auto;
+	display: flex;
+	flex-direction: column;
+	justify-content: flex-start;
+
+}
+.group_form {
+	text-align: start;
+}
+
+span {
+	margin-right: 10px;
+}
+
 
 
 

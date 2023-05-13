@@ -26,6 +26,9 @@ echo("Chat poste triggered");
       }
     echo("Intersting: " . $_SESSION['name']. $_POST['chat'] . "   Chat name id" . $chat_name_id);
       
+    if($active_chat_id < 0) {
+      $chat_name_id = "group_chat" . $active_chat_id;
+    }
     // Insert the new chat message into the database
     $result = mysqli_query(
       $conn,

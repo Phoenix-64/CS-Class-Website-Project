@@ -23,10 +23,7 @@ echo("Request_started");
     echo($current);
     $new_requests = $current . ";" . $active_user . ":" . $N_public;
     // Update users requests
-    $update = mysqli_query(
-      $conn,
-      "UPDATE `user` SET `requests`= '$new_requests' WHERE `user_id`='$requested_user'" 
-    );
+    
     $stmt= $conn->prepare("UPDATE user SET requests=? WHERE user_id=?");
     $stmt->bind_param("si", $new_requests, $requested_user);
     $stmt->execute();

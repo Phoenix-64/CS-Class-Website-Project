@@ -1,5 +1,6 @@
 <?php
 include_once('config.php');
+include_once("groupchatsContentFetch.php");
 //echo("Empty");
 //echo("Epty2");
 
@@ -11,6 +12,12 @@ $result = $stmt->get_result();
 $active_user_result = $result->fetch_assoc();
 
 $active_chat_id = $active_user_result['active_chat'];
+
+if ($active_chat_id < 0) {
+    groupchatContent($active_user_result);
+    exit();
+}
+
 
 if ($activ_user < $active_chat_id) {
     $chat_name_id = mysqli_real_escape_string($conn, $activ_user . $active_chat_id);
@@ -60,12 +67,12 @@ while ($row = mysqli_fetch_assoc($result)) {
             break;
         case 2:
             //key
-            echo "key1241242:$message";
+            echo "key1241242:$chat_name_id:$message";
             $remove = mysqli_query($conn, "DELETE FROM `$chat_name_id` WHERE `message_type` = 2");
             break;
         case 3:
             //iv
-            echo "iv1241242:$message";
+            echo "iv1241242:$chat_name_id:$message";
             $remove = mysqli_query($conn, "DELETE FROM `$chat_name_id` WHERE `message_type` = 3");
             break;
 

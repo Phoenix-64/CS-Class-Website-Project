@@ -1,9 +1,9 @@
 <?php
+session_start();
 include_once('config.php');
 $result= mysqli_query($conn , "SELECT * FROM user");
 
 $active_user = $_POST["activ_user"];
-
 
 
 $stmt = $db->prepare("SELECT * FROM user WHERE user_id = ?");
@@ -12,9 +12,6 @@ $stmt->execute();
 $result_current = $stmt->get_result();
 $current_user = $result_current->fetch_assoc();
 
-
-
-$new_requests = $current_user['requests'] . ";" . $active_user;
 
 if (isset($_POST['activ_user'])) {
 //echo($new_requests);
@@ -47,34 +44,29 @@ while ($row = mysqli_fetch_assoc($result)){
 	if($active_user == $user_id) {
 		continue;
 	}
+	if(str_contains($_POST["already_fetched"], $row['user_name'])) {
+        continue;
+    }
+	echo("::" . $user_id . ";" . $row['user_name']);
 	
 	if(in_array($user_id, $availabel_chats)) {
 
+
 		//Check if user is Online and the one with the active chat
 		if($row['user_status'] == 1 && $user_id == $active_chat){
-			echo "<div id='user'>
-					<font color='#0099FF'>".$row['user_name']." (Online)"."</font> 
-				</div>";
+			echo ";1";
 			}
 		//Chek if user is Online and not the one with the active chat		
 		elseif($row['user_status'] == 1 && $user_id != $active_chat){
-			echo "<div id='user'>
-					<font color='#009900'>".$row['user_name']." (Online)"."</font> 
-					<button data-user='$user_id' onclick='changeActive(this)'> Open Chat </button>
-				</div>";
+				echo ";2";
 			}
 		// Check if offline user is the one with the active chat
 		elseif($user_id == $active_chat) {
-			echo "<div id='user'>
-					<font color='#FF00FF'>".$row['user_name']." (Offline)"."</font> 
-				</div>";
+			echo ";3";
 			}
 		// Remaining offline non active
 		else {
-			echo "<div id='user'>
-				<font color='#FF0000'>".$row['user_name']." (Offline)"."</font> 
-				<button data-user='$user_id' onclick='changeActive(this)'> Open Chat </button>
-				</div>";
+			echo ";4";
 			}
 			
 		}
@@ -82,50 +74,32 @@ while ($row = mysqli_fetch_assoc($result)){
 	elseif(str_contains($requests, ";" . $active_user)) {
 		//Check if user is Online
 		if($row['user_status'] == 1){
-			echo "<div id='user'>
-					<font color='#009933'>".$row['user_name']." (Online) Already Requested"."</font> 
-				</div>";
+			echo ";5";
 			}
 		// Remaining offline
 		else {
-			echo "<div id='user'>
-				<font color='#FF0033'>".$row['user_name']." (Offline) Already Requested"."</font> 
-				</div>";
+			echo ";6";
 			}
 		}
 	//If the current user has a request from this id display butons
 	elseif(str_contains($requests_for_active, ";" . $user_id)) {
 		//Check if user is Online
 		if($row['user_status'] == 1){
-			echo "<div id='user'>
-					<font color='#009900'>".$row['user_name']." (Online)"."</font> 
-					<button data-user='$user_id' onclick='acceptRequest(this)'> Accept Request </button>
-					<button data-user='$user_id' onclick='declineRequest(this)'> Decline Request </button>
-				</div>";
+			echo ";7";
 			}
 		// Remaining offline
 		else {
-			echo "<div id='user'>
-				<font color='#FF0000'>".$row['user_name']." (Offline)"."</font> 
-				<button data-user='$user_id' onclick='acceptRequest(this)'> Accept Request </button>
-				<button data-user='$user_id' onclick='declineRequest(this)'> Decline Request </button>
-				</div>";
+			echo ";8";
 			}
 		}			
 	else {
 		//Check if user is Online
 		if($row['user_status'] == 1){
-			echo "<div id='user'>
-					<font color='#009900'>".$row['user_name']." (Online)"."</font> 
-					<button data-user='$user_id' onclick='changeRequest(this)'> Request Chat </button>
-				</div>";
+			echo ";9";
 			}
 		// Remaining offline
 		else {
-			echo "<div id='user'>
-				<font color='#FF0000'>".$row['user_name']." (Offline)"."</font> 
-				<button data-user='$user_id' onclick='changeRequest(this)'> Request Chat </button>
-				</div>";
+			echo ";10";
 			}		
 	}
 	}

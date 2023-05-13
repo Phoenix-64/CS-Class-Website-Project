@@ -74,10 +74,12 @@
 
     //set first message to iv and key
     $stmt = $db->prepare("INSERT INTO `$chat_name_id` (chat_id, chat_person_name, chat_value, chat_time, message_type) 
-                          VALUES (NULL,?, ?, NOW(), ?");
-    $stmt->bind_param("ssi", $_SESSION["name"], $key_enc, 2);
+                          VALUES (NULL,?, ?, NOW(), ?)");
+    $type = 2;
+    $stmt->bind_param("ssi", $_SESSION["name"], $key_enc, $type);
     $stmt->execute();
-    $stmt->bind_param("ssi", $_SESSION["name"], $iv_enc, 3);
+    $type = 3;
+    $stmt->bind_param("ssi", $_SESSION["name"], $iv_enc, $type);
     $stmt->execute();
 
   }

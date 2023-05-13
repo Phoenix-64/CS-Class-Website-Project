@@ -11,33 +11,49 @@ if (isset($_GET['logout'])) {
   session_destroy();
   header('location: practice.php?logout_successfully=<span style="color:green">You have successfully Logged Out.</span>');
 }
+
+if (isset($_GET['create_group'])) {
+  header('location: create_group.php');
+}
 ?>
 <script src="RSA_PRogramm/ras_example.js"></script>
 <script src="chacha-js/chacha.js"></script>
 <script>
-  function changeActive(element) {
-    element.style.backgroundColor = "red";
-    document.getElementById('user').dataset.activ = element.dataset.user
-    var xhr = new XMLHttpRequest();
-    xhr.open('POST', 'changeActiveChat.php', true);
-    xhr.setRequestHeader('content-type', 'application/x-www-form-urlencoded');
-    xhr.send('activ_user=' + document.getElementById('user').dataset.user + '&active_chat=' + element.dataset.user);
-    xhr.onreadystatechange = function() {}
+  called()
+  function called() {
+    console.log("Function called");
+  }
+
+  function fullfillNRequest(request, chat_id) {
+    let key = localStorage.getItem("group_chat-" + chat_id + "key").split(",").flatMap((x) => Number(x));
+    let iv = localStorage.getItem("group_chat-" + chat_id + "iv").split(",").flatMap((x) => Number(x));
+    requests = request.split(";");
+    requests.shift();
+    requests.forEach(doRequests);
+
+
+    function doRequests(value, index, array) {
+      requested_user = value.split("-")[0];
+      N_public = BigInt(value.split("-")[1]);
+      
+      key_enc = encrypt_RSA(N_public, key);
+      iv_enc = encrypt_RSA(N_public, iv);
+
+      let xhr2 = new XMLHttpRequest();
+      xhr2.open('POST', 'GroupTransmitCHACHA.php', true);
+      xhr2.setRequestHeader('content-type', 'application/x-www-form-urlencoded');
+      xhr2.send('requested_user=' + requested_user + '&iv_enc=' + JSON.stringify(iv_enc) + '&key_enc=' + JSON.stringify(key_enc) + '&chat_id=' + chat_id + '&value=' + value);
+      xhr2.onload = function() { 
+        document.getElementById('loginperson').innerHTML += xhr2.responseText;
+
+      }
+    }
+
 
   }
 
 
-  function changeRequest(element) {
-    element.style.backgroundColor = "red";
-    console.log("Requested: " + element.dataset.user);
-    //Compute chat Id whee to save local key
-    let activ_user = document.getElementById('user').dataset.user
-    let requested_user = element.dataset.user
-    let chat_id = "" + activ_user + requested_user
-    if (activ_user > requested_user) {
-      chat_id = "" + requested_user + activ_user 
-    }
-
+  function generateRSA(saveName) {
     //Generate RSA Keys:
     let n = 53
     let p = findPrim(n); //Prim Number
@@ -65,18 +81,76 @@ if (isset($_GET['logout'])) {
     } 
 
     //save d in local sotrage
-    localStorage.setItem(chat_id + "d", d);
-    localStorage.setItem(chat_id + "N", N);
+    localStorage.setItem(saveName + "d", d);
+    localStorage.setItem(saveName + "N", N);
+
+    return N;
+  }
+
+  function changeActive(element) {
+    document.getElementById('loginperson').innerText = "";
+    document.getElementById('chatarea').innerText = "";
+    element.style.backgroundColor = "red";
+    document.getElementById('user').dataset.activ = element.dataset.user
+    var xhr = new XMLHttpRequest();
+    xhr.open('POST', 'changeActiveChat.php', true);
+    xhr.setRequestHeader('content-type', 'application/x-www-form-urlencoded');
+    xhr.send('activ_user=' + document.getElementById('user').dataset.user + '&active_chat=' + element.dataset.user);
+    xhr.onload = function() {}
+    
+
+  }
+
+
+  function changeRequest(element) {
+    element.style.backgroundColor = "red";
+    console.log("Requested: " + element.dataset.user);
+    //Compute chat Id whee to save local key
+    let activ_user = document.getElementById('user').dataset.user
+    let requested_user = element.dataset.user
+    let chat_id = "" + activ_user + requested_user
+    if (activ_user > requested_user) {
+      chat_id = "" + requested_user + activ_user 
+    }
+
+    let N = generateRSA(chat_id);
 
 
     var xhr = new XMLHttpRequest();
     xhr.open('POST', 'requestChat.php', true);
     xhr.setRequestHeader('content-type', 'application/x-www-form-urlencoded');
     xhr.send('activ_user=' + document.getElementById('user').dataset.user + '&requested_user=' + element.dataset.user + '&N_public=' + N);
-    xhr.onreadystatechange = function() {console.log(xhr.responseText)}
+    xhr.onload = function() {console.log(xhr.responseText)}
   }
   
+  function acceptGroupRequest(element) {
+    element.style.backgroundColor = "red";
+    let activ_user = document.getElementById('user').dataset.user
+    let requested_chat = element.dataset.user
+
+    let N = generateRSA(requested_chat + "_groupchat_");
+
+    var xhr = new XMLHttpRequest();
+    xhr.open('POST', 'acceptGroup.php', true);
+    xhr.setRequestHeader('content-type', 'application/x-www-form-urlencoded');
+    xhr.send('activ_user=' + document.getElementById('user').dataset.user + '&accepted_chat=' + element.dataset.user + '&N_public=' + N);
+    xhr.onload = function() {console.log(xhr.responseText)}
+
+  }
   
+  function encrypt_RSA(N_public, data) {
+    for (i in data) {
+      //add pad to message 
+      let padd = "" + pad_seperator + nBitRandom(8)
+      data[i] = BigInt("" + data[i] + padd)
+
+      //encrypt
+      
+      data[i] = power(data[i], e, N_public).toString()
+    }
+    return data
+  }
+
   function acceptRequest(element) {
     element.style.backgroundColor = "red";
     //Compute chat Id whee to save local key
@@ -113,26 +187,12 @@ if (isset($_GET['logout'])) {
 
 
 
-    for (i in key) {
-      //add pad to message 
-      let padd = "" + pad_seperator + nBitRandom(8)
-      key[i] = BigInt("" + key[i] + padd)
+    key = encrypt_RSA(N_public, key);
 
-      //encrypt
-      
-      key[i] = power(key[i], e, N_public).toString()
-    }
     console.log("Key enc: " + key)
     console.log("Iv raw: " + iv)
 
-    for (i in iv) {
-      //add pad to message 
-      let padd = "" + pad_seperator + nBitRandom(8)
-      iv[i] = BigInt("" + iv[i] + padd)
-
-      //encrypt
-      iv[i] = power(iv[i], e, N_public).toString()
-    }
+    iv = encrypt_RSA(N_public, iv);
     console.log("Iv enc: " + iv)
 
 
@@ -142,7 +202,7 @@ if (isset($_GET['logout'])) {
     xhr1.open('POST', 'acceptChat.php', true);
     xhr1.setRequestHeader('content-type', 'application/x-www-form-urlencoded');
     xhr1.send('activ_user=' + document.getElementById('user').dataset.user + '&N_public=' + N_public + '&accepted_user=' + element.dataset.user + '&key_enc=' + JSON.stringify(key) + '&iv_enc=' + JSON.stringify(iv));
-    xhr1.onreadystatechange = function() {console.log(xhr1.responseText)}
+    xhr1.onload = function() {console.log(xhr1.responseText)}
   }
 
 
@@ -153,11 +213,14 @@ if (isset($_GET['logout'])) {
     xhr.open('POST', 'declineChat.php', true);
     xhr.setRequestHeader('content-type', 'application/x-www-form-urlencoded');
     xhr.send('activ_user=' + document.getElementById('user').dataset.user + '&declined_user=' + element.dataset.user);
-    xhr.onreadystatechange = function() {console.log(xhr.responseText)}
+    xhr.onload = function() {console.log(xhr.responseText)}
   }
 
 
   function crypt_chach(chat_id, msg) {
+    if (localStorage.getItem(chat_id + "key") === null) {
+      return null
+    }
     let key = Uint16Array.from(localStorage.getItem(chat_id + "key").split(",")).buffer
     let iv = Uint16Array.from(localStorage.getItem(chat_id + "iv").split(",")).buffer
     let g    = new ChaCha(key, iv)
@@ -193,17 +256,24 @@ if (isset($_GET['logout'])) {
     if (activ_user > requested_user) {
       chat_id = "" + requested_user + activ_user 
     }
+    if (requested_user < 0) {
+      chat_id = "group_chat" + requested_user
+    }
     let enc = new TextEncoder();
 
     text = enc.encode(text)
     text = crypt_chach(chat_id, text)
+    if (text === null) {
+      document.getElementById("chatarea").innerText = "Encryption keys not found, wait till other user was active or contact developer"
+      return false
+    }
     text = JSON.stringify(Array.from(text))
 
     var xhr = new XMLHttpRequest(); 
     xhr.open('POST', 'chatdb.php', true);
     xhr.setRequestHeader('content-type', 'application/x-www-form-urlencoded');
     xhr.send('chat=' + text + '&activ_user=' + document.getElementById('user').dataset.user);
-    xhr.onreadystatechange = function() {
+    xhr.onload = function() {
     }
   }
 
@@ -214,39 +284,44 @@ if (isset($_GET['logout'])) {
     if (activ_user > requested_user) {
       chat_id = "" + requested_user + activ_user 
     }
+    if (requested_user < 0) {
+      chat_id = "group_chat" + requested_user
+    }
     var dec = new TextDecoder("utf-8");
 
     var xhr = new XMLHttpRequest();
     xhr.open('POST', 'chatFetch.php', true);
     xhr.setRequestHeader('content-type', 'application/x-www-form-urlencoded');
     xhr.send('activ_user=' + document.getElementById('user').dataset.user);
-    xhr.onreadystatechange = function() { all_echo = xhr.responseText
+    xhr.onload = function() { all_echo = xhr.responseText
 
-      if (!(typeof all_echo === 'string' && all_echo.length === 0)) {
+      if (!(typeof all_echo === 'string' && all_echo.trim().length === 0)) {
         all_echo = all_echo.split(":::")
         let display = []
         for (i in all_echo) {
           respons = all_echo[i]
-          if (respons.includes("\r\n")) {
+          if (respons.includes("\r\n") || respons.trim().length == 0) {
             break;
           }
 
           if(respons.includes("key1241242:")) {
-            let key = respons.split(":")[1]
+            let key = respons.split(":")[2]
+            let save_name = respons.split(":")[1]
             key = JSON.parse(key)
-            key = decrypt_rsa(chat_id, key)
+            key = decrypt_rsa(save_name, key)
             localStorage.setItem(chat_id + "key", JSON.stringify(key))
             }
 
           else if(respons.includes("iv1241242:")) {
-            let iv = respons.split(":")[1]
+            let iv = respons.split(":")[2]
+            let save_name = respons.split(":")[1]
             iv = JSON.parse(iv)
-            iv = decrypt_rsa(chat_id, iv)
-            localStorage.setItem(chat_id + "iv", JSON.stringify(iv))
+            iv = decrypt_rsa(save_name, iv)
+            localStorage.setItem(save_name + "iv", JSON.stringify(iv))
             }
 
           else if(respons.includes("Select or request a Chat")) {
-            document.getElementById('chatarea').innerHTML = "Select or request a Chat"
+            document.getElementById('chatarea').innerText = "Select or request a Chat"
             }
 
           else {
@@ -260,15 +335,21 @@ if (isset($_GET['logout'])) {
 
             msg = Uint8Array.from(JSON.parse(msg)) 
             msg = crypt_chach(chat_id, msg)
-            
+            if (msg === null) {
+              document.getElementById("chatarea").innerText = "Encryption keys not found, wait till other user was active or contact developer"
+              return false
+            }
+
+
             msg = dec.decode(msg);
             display.push("<div><span style='color: " + respons[0] + "; float: " + respons[1] + ";'> " + respons[2] + " " + respons[3] + ": " + msg + " </span></div><br>")
             if (respons.length == 6){
               display.push("<div><img src='uploads/" + msg + "' class='chat_image' style='float: " + respons[1] + "; width: 30vw; padding-left: 1vw; padding-bottom: .5vw;'></div><br>")
               }
+            document.getElementById('chatarea').innerHTML = display.join("")
             }
           }
-        document.getElementById('chatarea').innerHTML = display.join("")
+        
         }
       }
   }
@@ -283,12 +364,19 @@ if (isset($_GET['logout'])) {
     if (activ_user > requested_user) {
       chat_id = "" + requested_user + activ_user 
     }
+    if (requested_user < 0) {
+      chat_id = "group_chat" + requested_user
+    }
     let enc = new TextEncoder();
 
-    file_name = file_name.split("\\").slice(-1)
+    file_name = chat_id + ";;" +  file_name.split("\\").slice(-1)
     
     file_name = enc.encode(file_name)
     file_name = crypt_chach(chat_id, file_name)
+    if (file_name === null) {
+      document.getElementById("chatarea").innerText = "Encryption keys not found, wait till other user was active or contact developer"
+      return false
+    }
     file_name = JSON.stringify(Array.from(file_name))
     document.getElementById("fileNameEnc").value = file_name
     console.log(file_name)
@@ -299,18 +387,161 @@ if (isset($_GET['logout'])) {
 
   setInterval(users, 500);
 
+  function insert_users(value, index, array) {
+    let values = value.split(";")
 
+    let div = document.createElement('div');
+    let p = document.createElement('span');
+    let button = document.createElement('button');
+    let button1 = document.createElement('button');
+    div.id = "user";
+    p.innerText = values[1];
+    button.id = "usr_btn";
+    button1.id = "usr_btn";
+    button.dataset.user = values[0];
+    button1.dataset.user = values[0];
+    div.appendChild(p);
+
+    switch(Number(values[2])) {
+        case 1:
+          p.style.color = "#0099FF";
+          p.innerText += " (Online) ";
+          break;
+        case 2:
+          p.style.color = "#009900";
+          p.innerText += " (Online) ";
+          button.onclick = function() {changeActive(this);};
+          button.innerText = "Open Chat";
+          div.appendChild(button);
+          break;
+        case 3:
+          p.style.color = "#FF00FF";
+          p.innerText += " (Offline) ";
+          break;
+        case 4:
+          p.style.color = "#FF0000";
+          p.innerText += " (Offline)";
+          button.onclick = function() {changeActive(this);};
+          button.innerText = "Open Chat";
+          div.appendChild(button);
+          break;
+        case 5:
+          p.style.color = "#009933";
+          p.innerText += " (Online) Already Requested ";
+          break;
+        case 6:
+          p.style.color = "#FF0033";
+          p.innerText += " (Offline) Already Requested ";
+          break;
+        case 7:
+          p.style.color = "#009900";
+          p.innerText += " (Online) ";
+          button.onclick = function() {acceptRequest(this);};
+          button.innerText = "Accept Request";
+          div.appendChild(button);
+          button1.onclick = function() {declineRequest(this);};
+          button1.innerText = "Decline Request";
+          div.appendChild(button1);
+          break;
+        case 8:
+          p.style.color = "#FF0000";
+          p.innerText += " (Offline) ";
+          button.onclick = function() {acceptRequest(this);};
+          button.innerText = "Accept Request";
+          div.appendChild(button);
+          button1.onclick = function() {declineRequest(this);};
+          button1.innerText = "Decline Request";
+          div.appendChild(button1);
+          break;
+        case 9:
+          p.style.color = "#009900";
+          p.innerText += " (Online) ";
+          button.onclick = function() {changeRequest(this);};
+          button.innerText = "Request Chat";
+          div.appendChild(button);
+          break;
+        case 10:
+          p.style.color = "#FF0000";
+          p.innerText += " (Offline) ";
+          button.onclick = function() {changeRequest(this);};
+          button.innerText = "Request Chat";
+          div.appendChild(button);
+          break;  
+      }
+
+    
+    document.getElementById('loginperson').appendChild(div);
+  }
+
+  function insert_groupchats(value, index, array) {
+    let values = value.split(";")
+
+    if (values[3] == "1") {
+      fullfillNRequest(values[2], values[0])
+    }
+
+
+    let div = document.createElement('div');
+    let p = document.createElement('span');
+    let button = document.createElement('button');
+    let button1 = document.createElement('button');
+    div.id = "user";
+    p.innerText = values[1];
+    p.style.color = "#009900";
+    button.id = "usr_btn";
+    button1.id = "usr_btn";
+    button.dataset.user = -1 * Number(values[0]);
+    button1.dataset.user = -1 * Number(values[0]);
+    div.appendChild(p);
+    switch(Number(values[4])) {
+      case 0:
+        button.onclick = function() {acceptGroupRequest(this);};
+        button.innerText = "Accept Request";
+        div.appendChild(button);
+        button1.onclick = function() {declineRequest(this);};
+        button1.innerText = "Decline Request";
+        div.appendChild(button1);
+        break;
+      case 1:
+        button.onclick = function() {changeActive(this);};
+        button.innerText = "Open Chat";
+        div.appendChild(button);
+    }
+    document.getElementById('loginperson').appendChild(div);
+
+  }
 
   function users() {
+    let text = document.getElementById('loginperson').innerText.replace(/(\r\n|\n|\r)/gm, "");
     var xhr1 = new XMLHttpRequest();
     xhr1.open('POST', 'userFetch.php', true);
     xhr1.setRequestHeader('content-type', 'application/x-www-form-urlencoded');
-    xhr1.send('activ_user=' + document.getElementById('user').dataset.user);
-    xhr1.onreadystatechange = function() {
+    xhr1.send('activ_user=' + document.getElementById('user').dataset.user + '&already_fetched=' + text);
+    xhr1.onload = function() {
       // alert(xhr.responseText);
-      document.getElementById('loginperson').innerHTML = xhr1.responseText;
+
+      if (xhr1.responseText) {
+        let values = xhr1.responseText.split("::");
+        values.shift();
+        values.forEach(insert_users);
+        console.log("Called once");
+      }
     }
+
+    var xhr2 = new XMLHttpRequest();
+    xhr2.open('POST', 'groupChatsFetch.php', true);
+    xhr2.setRequestHeader('content-type', 'application/x-www-form-urlencoded');
+    xhr2.send('activ_user=' + document.getElementById('user').dataset.user + '&already_fetched=' + text);
+    xhr2.onload = function() { 
+      if (xhr2.responseText) {
+        let values = xhr2.responseText.split("::");
+        values.shift();
+        values.forEach(insert_groupchats);
+      }
+      }
   }
+
+  
 </script>
 
 
@@ -361,12 +592,15 @@ if (isset($_GET['logout'])) {
   $result = $result->fetch_assoc();
 
   $user_id = $result['user_id'];
+  $_SESSION['user_id'] = $user_id;
   $activ_chat = $result['active_chat'];
   echo "Aktueller Benutzer: <span id='user' data-activ='$activ_chat' data-user='$user_id'>$name</span>";
   ?>
 
   <form action="">
-    <input type="submit" name="logout" value="logout">
+    <input type="submit" name="logout" value="Logout">
+    <br>
+    <input type="submit" name="create_group" value="Create new Group">
   </form>
 </div>
 <div class="chat_container">
