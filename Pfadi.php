@@ -15,13 +15,13 @@
 
 <body>
     <div id="navbar">
-        <a href="index.html">Home</a>
-        <a href="Klettern.html">Klettern</a>
-        <a href="Amateurfunk.html">Amaterufunk</a>
-        <a href="Samariter.html">Samariter</a>
-        <a href="Feuerwehr.html">Feuerwehr</a>
-        <a href="Pfadi.html" class="active">Pfadi</a>
-        <a href="Operateur.html">Operateur</a>
+        <a href="index.php">Home</a>
+        <a href="Klettern.php">Klettern</a>
+        <a href="Amateurfunk.php">Amaterufunk</a>
+        <a href="Samariter.php">Samariter</a>
+        <a href="Feuerwehr.php">Feuerwehr</a>
+        <a href="Pfadi.php" class="active">Pfadi</a>
+        <a href="Operateur.php">Operateur</a>
         <a href="practice.php">Chat</a>
 
         <div class="darkmode_button">
