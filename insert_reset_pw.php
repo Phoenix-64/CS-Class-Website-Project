@@ -6,11 +6,11 @@
   include_once('config.php');
   $password = $_POST['pass1'];  
   $email = $_POST['emailadress'];
-  $password = password_hash($password, PASSWORD_ARGON2I);
+  $user_password = $_POST['hashed_pw_2'];
   // Insert the new user into the database
 
-  $stmt= $conn->prepare("UPDATE user SET user_password=? WHERE user_email=?");
-  $stmt->bind_param("ss", $password, $email);
+  $stmt= $conn->prepare("UPDATE user SET user_password=? pw_reset=`reset` WHERE user_email=?");
+  $stmt->bind_param("ss", $user_password, $email);
   $stmt->execute();
 
 

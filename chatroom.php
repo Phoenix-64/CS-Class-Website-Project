@@ -135,7 +135,7 @@ if (isset($_GET['create_group'])) {
     xhr.open('POST', 'acceptGroup.php', true);
     xhr.setRequestHeader('content-type', 'application/x-www-form-urlencoded');
     xhr.send('activ_user=' + document.getElementById('user').dataset.user + '&accepted_chat=' + element.dataset.user + '&N_public=' + N);
-    xhr.onload = function() {console.log(xhr.responseText)}
+    xhr.onload = function() {console.log(xhr.responseText); document.getElementById('loginperson').innerText = "";}
 
   }
   
@@ -215,7 +215,7 @@ if (isset($_GET['create_group'])) {
     xhr.open('POST', 'declineChat.php', true);
     xhr.setRequestHeader('content-type', 'application/x-www-form-urlencoded');
     xhr.send('activ_user=' + document.getElementById('user').dataset.user + '&declined_user=' + element.dataset.user);
-    xhr.onload = function() {console.log(xhr.responseText)}
+    xhr.onload = function() {console.log(xhr.responseText); document.getElementById('loginperson').innerText = "";}
   }
 
 
@@ -398,6 +398,10 @@ if (isset($_GET['create_group'])) {
   function insert_users(value, index, array) {
     let values = value.split(";")
 
+    if (document.getElementById('loginperson').innerText.includes(values[1])) {
+      continue;
+    }
+
     let div = document.createElement('div');
     let p = document.createElement('span');
     let button = document.createElement('button');
@@ -483,7 +487,9 @@ if (isset($_GET['create_group'])) {
 
   function insert_groupchats(value, index, array) {
     let values = value.split("##")
-
+    if (document.getElementById('loginperson').innerText.includes(values[1])) {
+      continue;
+    }
     if (values[3] == "1") {
       fullfillNRequest(values[2], values[0])
     }

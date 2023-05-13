@@ -8,11 +8,13 @@ function groupchatContent($active_user_result) {
         exit();
     }
 
+    $active_user_name = $active_user_result["user_name"];
+    $update = mysqli_query($conn, "UPDATE `$chat_name` SET `read`= TRUE WHERE `chat_person_name` != '$active_user_name'");
+
+
     // Select all chat records from the 'chat' table
     $result = mysqli_query($conn, "SELECT * FROM `$chat_name`");
     $stmt = $db->prepare("SELECT * FROM user WHERE user_name = ?");
-
-
     // Loop through each chat record
     while ($row = mysqli_fetch_assoc($result)) {
         // Extract the name and message from the current record

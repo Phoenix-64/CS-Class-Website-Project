@@ -32,7 +32,8 @@ if (mysqli_fetch_assoc($state) == NULL) {
     echo("Select or request a Chat");
     exit();
 }
-$update = mysqli_query($conn, "UPDATE `$chat_name_id` SET `read`=TRUE WHERE 1");
+$active_user_name = $active_user_result["user_name"];
+$update = mysqli_query($conn, "UPDATE `$chat_name_id` SET `read`=TRUE WHERE `chat_person_name` != '$active_user_name'");
 // Select all chat records from the 'chat' table
 $result = mysqli_query($conn, "SELECT * FROM `$chat_name_id`");
 $stmt = $db->prepare("SELECT * FROM user WHERE user_name = ?");
