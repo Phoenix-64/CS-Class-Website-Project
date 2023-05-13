@@ -7,6 +7,7 @@
     <script type="text/javascript" src="sticky_navbar.js"></script>
     <script type="text/javascript" src="darkmode_cookie.js"></script>
     <script type="text/javascript" src="cookie_notice.js"></script>
+
     <title>Homepage | Phönix 64</title>
     <meta name="description" content="Homepage">
     <meta name="author" content="Phönix 64">
@@ -18,10 +19,10 @@
         <a href="index.html">Home</a>
         <a href="Klettern.html">Klettern</a>
         <a href="Amateurfunk.html">Amaterufunk</a>
-        <a href="Samariter.html">Samariter</a>
+        <a href="Samariter.html" class="active">Samariter</a>
         <a href="Feuerwehr.html">Feuerwehr</a>
         <a href="Pfadi.html">Pfadi</a>
-        <a href="Operateur.html" class="active">Operateur</a>
+        <a href="Operateur.html">Operateur</a>
         <a href="practice.php">Chat</a>
 
         <div class="darkmode_button">
@@ -32,41 +33,48 @@
 
     <div class="container">
         <div class="item">
-            <h1>Theater Techniker</h1>
+            <h1>Samariter</h1>
             <hr>
         </div>
         <div class="item"> <script type="text/javascript">cookie_notice();</script> </div>
 
         <div class="item">
-            <h2>Operateur</h2>
+            <h2>Jugend Samariter HELP</h2>
             <p>
-                Im rahmen eines Schulprogramms begann ich im FGB bei den Theater Technikern wodurch ich meinen Fabel für alles Technische ausleben konnte und viele neue Erfahrungen sammeln durfte.
-                Wenn ihr mal was braucht, sagt einfach bescheid.
+                Auf der suche nach einem neuen Hobby habe ich vor 5 Jahren die <a class="ta" href="https://help-bern.ch/">HELP Bern</a> entdeckt  
+                
             </p>
             <div class="flex-container">
                 <div class="flex-item">
-                    <img src="pictures/1672311533973.jpg" alt="Tanzveranstaltung" >
+                    <img src="pictures/272118628_968122127386092_2528155418960993079_n.jpg" alt="Wundversorgungsmaterial Kennenlernen" >
                 </div> 
                 <div class="flex-item">
-                    <img src="pictures/1672311534000.jpg" alt="Endlich eine Linie" >
+                    <img src="pictures/315056916_438306388477442_7372747336858736853_n.jpg" alt="Fallbeispel" >
                 </div> 
-                <div class="flex-item">
-                    <img src="pictures/1672311534008.jpg" alt="Noch eine Tanzveranstaltung" >
-                </div> 
-                <div class="flex-item">
-                    <img src="pictures/1672311533762.jpg" alt="Komplexere Aulaveranstalltung" >
-                </div> 
-                <div class="flex-item">
-                    <video width="320" height="240" controls>
-                        <source src="pictures/VID_20220622_211502.mp4" type="video/mp4">
-                        Your browser does not support the video tag.
-                    </video> 
-                </div>
             </div>
             <hr>
         </div>
-
+        <div class="item">
+            <h2>Samariter</h2>
+            <p>
+                Daneben mache ich inzischen bei den erwachsenen mit.
+                Mit dem Verein Loraine-Breitenrain ache ich verschiedene Sanidienste wie zumbeispiel am GP, Frauenlauf oder der BEA. 
+                Vielleicht sieht mann sich ja mal, die Sanizimmer sind immer eine gute Anlaufstelle.
+            </p>
+        </div>
+        <div class="item"><hr></div>
     </div>
 </body>
 
 </html>
+<?php
+session_start();
+include_once('config.php');
+if (isset($_SESSION["email"])) {
+  $sql = "UPDATE user SET user_status='0' WHERE user_email=?";
+  $stmt= $conn->prepare($sql);
+  $stmt->bind_param("s", $_SESSION["email"]);
+  $stmt->execute();
+  session_destroy();
+}
+?>

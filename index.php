@@ -67,3 +67,14 @@
 
 </body>
 </html>
+<?php
+session_start();
+include_once('config.php');
+if (isset($_SESSION["email"])) {
+  $sql = "UPDATE user SET user_status='0' WHERE user_email=?";
+  $stmt= $conn->prepare($sql);
+  $stmt->bind_param("s", $_SESSION["email"]);
+  $stmt->execute();
+  session_destroy();
+}
+?>
