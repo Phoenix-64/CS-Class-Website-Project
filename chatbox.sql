@@ -41,28 +41,28 @@ CREATE TABLE IF NOT EXISTS `country` (
 REPLACE INTO `country` (`country_id`, `country_name`) VALUES
 	(1, 'Aargau'),
 	(2, 'Appenzell Innerrhoden'),
-	(3, 'Appenzell Ausserrhoden');
-  (4, 'Bern');
-  (5, 'Basel-Landschaft');
-  (6, 'Basel-Stadt');
-  (7, 'Freibourg');
-  (8, 'Genf');
-  (9, 'Glarus');
-  (10, 'Graubünden');
-  (11, 'Jura');
-  (12, 'Luzern');
-  (13, 'Neuenburg');
-  (14, 'Nidwalden');
-  (15, 'Obwalden');
-  (16, 'St. Gallen');
-  (17, 'Schaffhausen');
-  (18, 'Solothurn');
-  (19, 'Schwyz');
-  (20, 'Thurgau');
-  (21, 'Tessin');
-  (22, 'Uri');
-  (23, 'Waadt');
-  (24, 'Wallis');
+	(3, 'Appenzell Ausserrhoden'),
+  (4, 'Bern'),
+  (5, 'Basel-Landschaft'),
+  (6, 'Basel-Stadt'),
+  (7, 'Freibourg'),
+  (8, 'Genf'),
+  (9, 'Glarus'),
+  (10, 'Graubünden'),
+  (11, 'Jura'),
+  (12, 'Luzern'),
+  (13, 'Neuenburg'),
+  (14, 'Nidwalden'),
+  (15, 'Obwalden'),
+  (16, 'St. Gallen'),
+  (17, 'Schaffhausen'),
+  (18, 'Solothurn'),
+  (19, 'Schwyz'),
+  (20, 'Thurgau'),
+  (21, 'Tessin'),
+  (22, 'Uri'),
+  (23, 'Waadt'),
+  (24, 'Wallis'),
   (25, 'Zug');
 /*!40000 ALTER TABLE `country` ENABLE KEYS */;
 
@@ -76,7 +76,7 @@ CREATE TABLE IF NOT EXISTS `user` (
   `user_status` varchar(100) NOT NULL DEFAULT '0',
   `user_color` varchar(100) NOT NULL DEFAULT '#00FF00',
   `active_chat` int(11) NULL DEFAULT NULL,
-  `availabel_chat`TEXT NULL DEFAULT NULL,
+  `availabel_chats`TEXT NULL DEFAULT NULL,
   `requests` TEXT NULL DEFAULT NULL,
   `N_public`BIGINT NULL DEFAULT NULL,
   `pw_reset`TEXT NOT NULL,
@@ -91,7 +91,7 @@ CREATE TABLE IF NOT EXISTS `user` (
 /*!40101 SET SQL_MODE=IFNULL(@OLD_SQL_MODE, '') */;
 /*!40014 SET FOREIGN_KEY_CHECKS=IF(@OLD_FOREIGN_KEY_CHECKS IS NULL, 1, @OLD_FOREIGN_KEY_CHECKS) */;
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
-CREATE TABLE IF NOT EXISTS`google_oauth` (
+CREATE TABLE IF NOT EXISTS`tokens` (
  `id` int(11) NOT NULL AUTO_INCREMENT,
  `provider` varchar(255) NOT NULL,
  `provider_value` text NOT NULL,

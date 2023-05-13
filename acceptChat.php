@@ -39,7 +39,7 @@
     $stmt->bind_param("i", $accepted_user);
     $stmt->execute();
     $result = $stmt->get_result();
-
+    $result = $result->fetch_assoc();
     $current_availabel = $result['availabel_chats'];
     $new_availabel = $current_availabel . ";" . $active_user;
 
@@ -68,6 +68,7 @@
         `chat_time` time DEFAULT NULL,
         `message_type` INT(11) NOT NULL DEFAULT 0,
         `image_file` varchar(100) NOT NULL,
+        `read`  BOOLEAN NOT NULL DEFAULT FALSE,
         PRIMARY KEY (`chat_id`)
       ) ENGINE=InnoDB DEFAULT CHARSET=latin1;";
     $result = mysqli_query($conn, $query);

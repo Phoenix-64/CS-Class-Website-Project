@@ -103,6 +103,7 @@ if (isset($_GET['create_group'])) {
 
 
   function changeRequest(element) {
+    document.getElementById('loginperson').innerText = "";
     element.style.backgroundColor = "red";
     console.log("Requested: " + element.dataset.user);
     //Compute chat Id whee to save local key
@@ -128,7 +129,7 @@ if (isset($_GET['create_group'])) {
     let activ_user = document.getElementById('user').dataset.user
     let requested_chat = element.dataset.user
 
-    let N = generateRSA(requested_chat + "_groupchat_");
+    let N = generateRSA("group_chat" + requested_chat);
 
     var xhr = new XMLHttpRequest();
     xhr.open('POST', 'acceptGroup.php', true);
@@ -202,7 +203,8 @@ if (isset($_GET['create_group'])) {
     xhr1.open('POST', 'acceptChat.php', true);
     xhr1.setRequestHeader('content-type', 'application/x-www-form-urlencoded');
     xhr1.send('activ_user=' + document.getElementById('user').dataset.user + '&N_public=' + N_public + '&accepted_user=' + element.dataset.user + '&key_enc=' + JSON.stringify(key) + '&iv_enc=' + JSON.stringify(iv));
-    xhr1.onload = function() {console.log(xhr1.responseText)}
+    xhr1.onload = function() {console.log(xhr1.responseText); document.getElementById('loginperson').innerText = "";}
+    
   }
 
 
@@ -321,7 +323,7 @@ if (isset($_GET['create_group'])) {
             }
 
           else if(respons.includes("Select or request a Chat")) {
-            document.getElementById('chatarea').innerText = "Select or request a Chat"
+            document.getElementById('chatarea').innerText = "Select or request a Chat, if you tried to open a group Chat you will need to wait for the group creater to send you the keys by loging in himself."
             }
 
           else {
@@ -329,8 +331,8 @@ if (isset($_GET['create_group'])) {
             respons = respons.split(";")
             msg = respons[4]
             
-            if (respons.length == 6){
-              msg = respons[5]
+            if (respons.length == 7){
+              msg = respons[6]
               }
 
             msg = Uint8Array.from(JSON.parse(msg)) 
@@ -339,11 +341,17 @@ if (isset($_GET['create_group'])) {
               document.getElementById("chatarea").innerText = "Encryption keys not found, wait till other user was active or contact developer"
               return false
             }
-
+            let read
+            if(respons[5] === "1") {
+              read = "&#9745;";
+            }
+            else {
+              read = "&#9744;"
+            }
 
             msg = dec.decode(msg);
-            display.push("<div><span style='color: " + respons[0] + "; float: " + respons[1] + ";'> " + respons[2] + " " + respons[3] + ": " + msg + " </span></div><br>")
-            if (respons.length == 6){
+            display.push("<div><span style='color: " + respons[0] + "; float: " + respons[1] + ";'> " + read + respons[2] + " " + respons[3] + ": " + msg + " </span></div><br>")
+            if (respons.length == 7){
               display.push("<div><img src='uploads/" + msg + "' class='chat_image' style='float: " + respons[1] + "; width: 30vw; padding-left: 1vw; padding-bottom: .5vw;'></div><br>")
               }
             document.getElementById('chatarea').innerHTML = display.join("")
@@ -474,7 +482,7 @@ if (isset($_GET['create_group'])) {
   }
 
   function insert_groupchats(value, index, array) {
-    let values = value.split(";")
+    let values = value.split("##")
 
     if (values[3] == "1") {
       fullfillNRequest(values[2], values[0])
@@ -492,9 +500,10 @@ if (isset($_GET['create_group'])) {
     button1.id = "usr_btn";
     button.dataset.user = -1 * Number(values[0]);
     button1.dataset.user = -1 * Number(values[0]);
-    div.appendChild(p);
+    
     switch(Number(values[4])) {
       case 0:
+        div.appendChild(p);
         button.onclick = function() {acceptGroupRequest(this);};
         button.innerText = "Accept Request";
         div.appendChild(button);
@@ -503,9 +512,17 @@ if (isset($_GET['create_group'])) {
         div.appendChild(button1);
         break;
       case 1:
+        div.appendChild(p);
         button.onclick = function() {changeActive(this);};
         button.innerText = "Open Chat";
         div.appendChild(button);
+        break;
+      case 2:
+        div.appendChild(p);
+        p.style.color = "#0099FF";
+        break;
+      case 3:
+        break;
     }
     document.getElementById('loginperson').appendChild(div);
 

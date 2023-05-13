@@ -6,14 +6,14 @@
   include_once('config.php');
 
   // Get the email and password from the POST request
-  $email = $_POST['email'];
-  $password = $_POST['password'];
+  $user_email = $_POST['email'];
+  $user_password = $_POST['hashed_pw_2'];
 
 
 
   // Select the user with the matching email
   $stmt = $db->prepare("SELECT * FROM user WHERE user.user_email = ?");
-  $stmt->bind_param("s", $email);
+  $stmt->bind_param("s", $user_email);
   $stmt->execute();
   $result = $stmt->get_result();
 
@@ -23,21 +23,21 @@
   $password_hash = $row['user_password'];
 
   // Check if a user was found
-  if ($result->num_rows > 0 && password_verify($password, $password_hash)) {
+  if ($result->num_rows > 0 && $user_password === $password_hash) {
     
       // If a user was found and password is corect, set session variables and redirect to the chatroom
       echo "success";
-      $_SESSION['email'] = $email;
+      $_SESSION['email'] = $user_email;
       $_SESSION['password'] = $password_hash;
       $_SESSION['name'] = $name;
 
       // Update the user's status to "online"
       $query = mysqli_query(
         $conn,
-        "UPDATE user SET user_status='1' WHERE user_email='$email'"
+        "UPDATE user SET user_status='1' WHERE user_email='$user_email'"
       );
       $stmt= $conn->prepare("UPDATE user SET user_status='1' WHERE user_email=?");
-      $stmt->bind_param("s", $email);
+      $stmt->bind_param("s", $user_email);
       $stmt->execute();
       if ($_POST["page"] == "poste") {
         header('location: Blog/poste.php');

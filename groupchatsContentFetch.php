@@ -19,6 +19,7 @@ function groupchatContent($active_user_result) {
         $name = $row['chat_person_name'];
         $message = $row['chat_value'];
         $time = $row['chat_time'];
+        $read = $row['read'];
 
 
         $stmt->bind_param("s", $name);
@@ -34,11 +35,11 @@ function groupchatContent($active_user_result) {
         // Print the name and message
         switch($row['message_type']) {
             case 0:
-                echo "$color;$align;$time;$name;$message:::";
+                echo "$color;$align;$time;$name;$message;$read:::";
                 break;
             case 1:
                 $file_name = $row['image_file'];
-                echo "$color;$align;$time;$name;$message;$file_name:::";
+                echo "$color;$align;$time;$name;$message;$read;$file_name:::";
                 break;
             case 2:
                 //key

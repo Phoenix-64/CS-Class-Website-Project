@@ -8,6 +8,7 @@ function generateCHACHA(name){
     localStorage.removeItem(name);
     localStorage.setItem(name + "key", key)
     localStorage.setItem(name + "iv", iv)
+    window.location.href = 'chatroom.php?error=Group Created'
 }
 </script>
 
@@ -56,10 +57,10 @@ foreach ($parameters as $value) {
 
 
 //$stmt = $db->prepare("SELECT groupchat_id FROM groupchats WHERE groupchat_name=")
+echo "<script>generateCHACHA('$chacha_path')</script>";
 
 
 
-echo "<script>generateCHACHA('$chacha_path')</script>"
 ?>
 
 

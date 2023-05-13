@@ -14,8 +14,8 @@
     $iv_enc =  $requested_user . ";" . $_POST['iv_enc'];
     $name = $_SESSION["name"];
     
-    echo($key_enc);
-    echo($_SESSION["name"]);
+    //echo($key_enc);
+    //echo($_SESSION["name"]);
 
     $chat_name_id = "group_chat-" . $chat_id;
     $query = "CREATE TABLE IF NOT EXISTS `$chat_name_id` (
@@ -25,6 +25,7 @@
         `chat_time` time DEFAULT NULL,
         `message_type` INT(11) NOT NULL DEFAULT 0,
         `image_file` varchar(100) NOT NULL,
+        `read`  BOOLEAN NOT NULL DEFAULT FALSE,
         PRIMARY KEY (`chat_id`)
       ) ENGINE=InnoDB DEFAULT CHARSET=latin1;";
     $result = mysqli_query($conn, $query);
@@ -47,7 +48,7 @@
     $result = $result->fetch_assoc();
     //Get current requests and remove old one
     $current_request = $result['groupchat_Npublic'];
-    $new_requests = str_replace($_POST["value"] ,"", $current_request);
+    $new_requests = str_replace(";" . $_POST["value"] ,"", $current_request);
 
 
     $stmt = $db->prepare("UPDATE groupchats SET groupchat_Npublic=? WHERE groupchat_id = ?");

@@ -131,6 +131,7 @@ function validate(value) {
   console.log(pw);
   console.log(color);
   if (name && email && pw && color) {
+    document.getElementById("hashed_pw").value = cyrb53(document.getElementById('pass1').value);
     document.getElementById("submit").disabled = false;
   }
   else {
@@ -138,8 +139,26 @@ function validate(value) {
   }
 }
 
+const cyrb53 = (str, seed = 0) => {
+    let h1 = 0xdeadbeef ^ seed, h2 = 0x41c6ce57 ^ seed;
+    for(let i = 0, ch; i < str.length; i++) {
+        ch = str.charCodeAt(i);
+        h1 = Math.imul(h1 ^ ch, 2654435761);
+        h2 = Math.imul(h2 ^ ch, 1597334677);
+    }
+    h1  = Math.imul(h1 ^ (h1 >>> 16), 2246822507);
+    h1 ^= Math.imul(h2 ^ (h2 >>> 13), 3266489909);
+    h2  = Math.imul(h2 ^ (h2 >>> 16), 2246822507);
+    h2 ^= Math.imul(h1 ^ (h1 >>> 13), 3266489909);
+  
+    return 4294967296 * (2097151 & h2) + (h1 >>> 0);
+};
 
-
+function setHashed() {
+  document.getElementById("hashed_pw_2").value = cyrb53(document.getElementById('password').value);
+  console.log("PW set")
+  return true;
+}
 </script>
 
 
@@ -222,6 +241,7 @@ if(!$result){
 <td>Password : </td><td><input type="password" name="pass1" id="pass1" onblur="validate()" /></td></tr><tr>
 <td>Password bestätigen : </td><td><input type="password" name="pass2" id="pass2" onblur="validate()" /></td><td>
 <div id="cnfrmpass"></div></td></tr><tr>
+<input type='hidden' id='hashed_pw' name='hashed_pw' value="">
 <td colspan="2"><center><input type="submit" name="sbt" id="submit" disabled/></td></table></form> 
 
 
@@ -229,7 +249,7 @@ if(!$result){
 <div style="margin-left: 5vw;">
 
 
-<form method="post" action="process.php">
+<form method="post" action="process.php" onSubmit="return setHashed()">
 <table><tr>
 <td colspan="2"><center> <h2>Login</h2></td>
 </tr>
@@ -237,9 +257,10 @@ if(!$result){
 <tr>
 <td>
 Email : </td><td><input type="email" name="email"  /></td></tr><tr>
-<td> Password : </td><td><input type="password" name="password" /></td></tr>
+<td> Password : </td><td><input type="password" id="password" name="password" /></td></tr>
 <tr><td colspan="2"><center> <input type="submit" name="loginbtn" /></td></tr></table>
 <input type='hidden' name='page' value='chat' />
+<input type='hidden' id='hashed_pw_2' name='hashed_pw_2' value="">
 </form> 
 <?php if( isset($_GET['login_error'])){ ?><?php echo ($_GET['login_error']); ?>
 <?php } ?>
