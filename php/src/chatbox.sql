@@ -80,6 +80,7 @@ CREATE TABLE IF NOT EXISTS `user` (
   `requests` TEXT NULL DEFAULT NULL,
   `N_public`BIGINT NULL DEFAULT NULL,
   `pw_reset`TEXT NOT NULL,
+  `verified` BOOLEAN NOT NULL DEFAULT FALSE,
   PRIMARY KEY (`user_id`),
   UNIQUE KEY `UX_Constraint` (`user_email`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;

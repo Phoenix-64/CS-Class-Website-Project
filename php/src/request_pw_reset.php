@@ -77,7 +77,7 @@ $mail->setFrom($clientemail, 'Pheonixes Website Emailer');
 $mail->addAddress($user_email, 'The User');
 $mail->isHTML(true);
 $mail->Subject = 'Phoenixes Website password reset';
-$mail->Body    = "<b>If you requested the link proced with the password reset otherwise disregard it: https://localhost/myTestWebapp/pw_reset.php?email=$user_email&string=$user_reset_string</b>";
+$mail->Body    = "<b>If you requested the <a href='https://localhost:800/pw_reset.php?email=$user_email&string=$user_reset_string'>link</a> proced with the password reset otherwise disregard it.</b>";
 
 // send the message, check for errors
 if (!$mail->send()) {
