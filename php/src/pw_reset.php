@@ -1,11 +1,7 @@
 <?php
-  // Start a new session
-  session_start();
-
-  // Include the config file
-  require_once 'config.php';
-
-
+session_start();
+// Include the config file
+require_once 'config.php';
 ?>
 <script>
 const cyrb53 = (str, seed = 0) => {
@@ -24,7 +20,8 @@ const cyrb53 = (str, seed = 0) => {
 };
 
 function setHashed() {
-  document.getElementById("hashed_pw_2").value = cyrb53(document.getElementById('pass1').value);
+  document.getElementById("hashed_pw_2").value = cyrb53(
+                      document.getElementById('pass1').value);
   console.log("PW set")
   return true;
 }
@@ -36,10 +33,12 @@ function checkPasswordMatch() {
   // Check if the values are equal
   if (pass1 === pass2) {
     // Update the cnfrmpass element with a message indicating the passwords match
-    document.getElementById('cnfrmpass').innerHTML = '<font color="#00CC00">Passwörter stimmen</font>';
+    document.getElementById('cnfrmpass').innerHTML = '<font color="#00CC00"> \
+                                                    Passwörter stimmen</font>';
 
     if (pass1.length < 6) {
-      document.getElementById('cnfrmpass').innerHTML = '<font color="red">Passwort zu kurz</font>';
+      document.getElementById('cnfrmpass').innerHTML = '<font color="red"> \
+                                                      Passwort zu kurz</font>';
       document.getElementById("submit").disabled = true;
       return false;
     }
@@ -47,8 +46,10 @@ function checkPasswordMatch() {
     return true;
   } 
   else {
-    // Update the cnfrmpass element with a message indicating the passwords do not match
-    document.getElementById('cnfrmpass').innerHTML = '<font color="red">Passwörter stimmen nicht überein</font>';
+    // Update the cnfrmpass element with a message indicating the passwords 
+    // do not match
+    document.getElementById('cnfrmpass').innerHTML = '<font color="red"> \
+                                          Passwörter stimmen nicht überein</font>';
     document.getElementById("submit").disabled = true;
     return false;
   }

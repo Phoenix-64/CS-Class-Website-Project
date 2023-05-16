@@ -5,23 +5,11 @@ $result = mysqli_query($conn, "SELECT * FROM user");
 
 $active_user = $_POST["activ_user"];
 
-
 $stmt = $db->prepare("SELECT * FROM user WHERE user_id = ?");
 $stmt->bind_param("i", $active_user);
 $stmt->execute();
 $result_current = $stmt->get_result();
 $current_user   = $result_current->fetch_assoc();
-
-
-if (isset($_POST['activ_user'])) {
-    // echo($new_requests);
-    // echo($current_user['requests']);
-    // $update = mysqli_query(
-    // $conn,
-    // "UPDATE `user` SET `requests`= '$new_requests' WHERE `user_id`='$active_user'"
-    // );
-    // echo($update);
-}
 
 
 $active_chat = $current_user['active_chat'];

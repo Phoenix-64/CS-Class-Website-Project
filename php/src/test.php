@@ -1,7 +1,5 @@
 <?php
-
 $id = $_GET['idd'];
-// echo $id;
 require_once 'config.php';
 
 $stmt = $db->prepare("SELECT * FROM country WHERE country_id = ?");
@@ -14,10 +12,8 @@ if ($stmt->errno != 0) {
 } else { ?>
 city : <select name="_city">
     <?php while ($row = $result->fetch_assoc()) {?>
-<option value="<?php echo $row['city_id'];?>"> <?php echo $row['city_name'];?> </option>
+<option value="<?php echo $row['city_id'];?>"> <?php echo $row['city_name'];?> 
+</option>
     <?php } ?>
 </select>
-
-
 <?php }
-

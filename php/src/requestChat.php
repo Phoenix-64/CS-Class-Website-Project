@@ -1,13 +1,9 @@
 <?php
-  // Start a new session
-  session_start();
-
-  // Include the config file
-  require_once 'config.php';
-echo("Request_started");
-  // Check if the chat form was submitted
+session_start();
+// Include the config file
+require_once 'config.php';
+// Check if the chat form was submitted
 if (isset($_POST['activ_user'])) {
-    echo("If_passed");
     $active_user    = $_POST['activ_user'];
     $requested_user = $_POST['requested_user'];
     $N_public       = $_POST['N_public'];
@@ -18,8 +14,6 @@ if (isset($_POST['activ_user'])) {
     $result  = $stmt->get_result();
     $row     = $result->fetch_assoc();
     $current = $row['requests'];
-
-    echo($current);
     $new_requests = $current.";".$active_user.":".$N_public;
     // Update users requests
     $stmt = $conn->prepare("UPDATE user SET requests=? WHERE user_id=?");

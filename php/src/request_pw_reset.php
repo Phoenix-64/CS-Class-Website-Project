@@ -21,8 +21,6 @@ $mail->SMTPSecure = PHPMailer::ENCRYPTION_SMTPS;
 $mail->SMTPAuth = true;
 $mail->AuthType = 'XOAUTH2';
 
-
-
 $db_r         = new DB();
 $refreshToken = $db_r->get_refersh_token();
 
@@ -47,20 +45,17 @@ $mail->setOAuth(
     )
 );
 
-
 function generateRandomString($length=10)
 {
-    $characters       = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+    $characters       = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHI' .
+                        'JKLMNOPQRSTUVWXYZ';
     $charactersLength = strlen($characters);
     $randomString     = '';
     for ($i = 0; $i < $length; $i++) {
         $randomString .= $characters[random_int(0, ($charactersLength - 1))];
     }
-
     return $randomString;
-
 }//end generateRandomString()
-
 
 // Get user data and create reset link
 $user_email        = $_POST['email'];
@@ -77,17 +72,22 @@ $mail->setFrom($clientemail, 'Pheonixes Website Emailer');
 $mail->addAddress($user_email, 'The User');
 $mail->isHTML(true);
 $mail->Subject = 'Phoenixes Website password reset';
-$mail->Body    = "<b>If you requested the <a href='https://localhost:800/pw_reset.php?email=$user_email&string=$user_reset_string'>link</a> proced with the password reset otherwise disregard it.</b>";
+$mail->Body    = "<b>If you requested the 
+                <a href='https://localhost:800/pw_reset.php?
+                email=$user_email&string=$user_reset_string'>link</a> 
+                proced with the password reset otherwise disregard it.</b>";
 
 // send the message, check for errors
 if (!$mail->send()) {
     echo 'Mailer Error: '.$mail->ErrorInfo;
     header(
-        'location: practice.php?login_error=<span style="color:red">Reset Email could not be send contact developer.</span>'
+        'location: practice.php?login_error=<span style="color:red">
+        Reset Email could not be send contact developer.</span>'
     );
 } else {
     echo 'Message sent!';
     header(
-        'location: practice.php?login_error=<span style="color:green">Check your emails and spam folder reset Email should have been send.</span>'
+        'location: practice.php?login_error=<span style="color:green">
+        Check your emails and spam folder reset Email should have been send.</span>'
     );
 }

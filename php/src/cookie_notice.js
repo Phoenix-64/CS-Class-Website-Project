@@ -1,5 +1,7 @@
-// the clean way of implementing darkmode would be using the prefers-color-scheme property.
-// but to show that I am able to use javascript and save cookies I decided to implement it on my own
+/**  the clean way of implementing darkmode would be using the 
+ *   prefers-color-scheme property. But to show that I am able to use 
+ *   javascript and save cookies I decided to implement it on my own.
+*/
 function cookie_notice()
 {
     document.write("<div id=\"cookieNotice\" class=\"light display-right\" style=\"display: none;\">");

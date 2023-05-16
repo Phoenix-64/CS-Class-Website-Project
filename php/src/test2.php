@@ -1,13 +1,11 @@
 <?php
 $email = $_GET['email'];
-// echo $email;
 require_once 'config.php';
 
 $stmt = $db->prepare("SELECT * FROM user WHERE user_email = ?");
 $stmt->bind_param("s", $email);
 $stmt->execute();
 $rows = $stmt->affected_rows;
-// echo $rows;
 if ($stmt->affected_rows > 0) {
     echo "<font color='#FF0000'>Email bereits vergeben </font>";
 } else {

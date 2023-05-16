@@ -1,11 +1,7 @@
 <?php
-  // Start a new session
-  session_start();
-
-  // Include the config file
-  require_once 'config.php';
-
-
+session_start();
+// Include the config file
+require_once 'config.php';
 ?>
 <head>
     <meta charset="UTF-8">
@@ -38,25 +34,27 @@
 </div>
 <div class="container">
 
-<?php if (isset($_GET['email']) && isset($_GET['string'])) {
-    $email  = $_GET['email'];
-    $string = $_GET['string'];
+<?php 
+if (isset($_GET['email']) && isset($_GET['string'])) {
+  $email  = $_GET['email'];
+  $string = $_GET['string'];
 
-    $stmt = $db->prepare("SELECT * FROM user WHERE user_email = ?");
-    $stmt->bind_param("s", $email);
-    $stmt->execute();
-    $result       = $stmt->get_result();
-    $row          = $result->fetch_assoc();
-    $saved_string = $row['pw_reset'];
+  $stmt = $db->prepare("SELECT * FROM user WHERE user_email = ?");
+  $stmt->bind_param("s", $email);
+  $stmt->execute();
+  $result       = $stmt->get_result();
+  $row          = $result->fetch_assoc();
+  $saved_string = $row['pw_reset'];
 
-    if ($saved_string !== $string) {
-        echo("Your provided string is not valid");
-    } else {
-        $stmt = $conn->prepare("UPDATE user SET pw_reset=`` verified=TRUE WHERE user_email=?");
-        $stmt->bind_param("s", $email);
-        $stmt->execute();
-        echo ("Your email is now verified you can now log in thank you and have fun.");
-    }
+  if ($saved_string !== $string) {
+      echo("Your provided string is not valid");
+  } else {
+      $stmt = $conn->prepare("UPDATE user SET pw_reset=`` 
+                        verified=TRUE WHERE user_email=?");
+      $stmt->bind_param("s", $email);
+      $stmt->execute();
+      echo ("Your email is now verified you can now log in thank you and have fun.");
+  }
 } else {
     echo("No string and Email given");
 }//end if
@@ -64,6 +62,5 @@
 <?php if (isset($_GET['login_error'])) {
     ?><?php echo ($_GET['login_error']); ?>
 <?php } ?>
-
 </div>
 <body>

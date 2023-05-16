@@ -3,7 +3,6 @@ session_start();
 require_once 'config.php';
 $result = mysqli_query($conn, "SELECT * FROM user");
 
-
 $already_fetched = $_POST["already_fetched"];
 $active_user     = $_SESSION["user_id"];
 

@@ -1,6 +1,5 @@
 <?php
 require_once 'config.php';
-
 $activ_user    = $_POST['activ_user'];
 $accepted_user = $_POST['accepted_user'];
 $stmt          = $db->prepare("SELECT * FROM user WHERE user_id = ?");
@@ -15,6 +14,4 @@ foreach ($requests as $key => $value) {
         $N_public = explode(":", $value)[1];
     }
 }
-
-
 echo("$N_public");

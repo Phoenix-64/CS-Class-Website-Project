@@ -9,7 +9,6 @@ if (isset($_SESSION["email"])) {
     session_destroy();
 }
 ?>
-
 <!DOCTYPE html>
 <html lang="en">
 
@@ -80,6 +79,5 @@ if (isset($_SESSION["email"])) {
 
     </div>
 </body>
-
 </html>
 

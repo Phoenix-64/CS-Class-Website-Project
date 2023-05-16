@@ -1,11 +1,10 @@
 <?php
-  // Start a new session
-  session_start();
+session_start();
 
-  // Include the config file
-  require_once 'config.php';
+// Include the config file
+require_once 'config.php';
 
-  // Check if the chat form was submitted
+// Check if the chat form was submitted
 if (isset($_POST['activ_user'])) {
     $active_user = $_POST['activ_user'];
     $active_chat = $_POST['active_chat'];

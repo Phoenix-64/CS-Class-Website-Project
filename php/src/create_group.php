@@ -4,10 +4,7 @@
 session_start();
 require_once 'config.php';
 ?>
-
-
 <script>
-
 setInterval(users, 500)
 
 function insert_users(value, index, array) {
@@ -20,31 +17,26 @@ function insert_users(value, index, array) {
     input.value = values[0];
     label.innerText = values[1];
 
-
     document.getElementById('persons').appendChild(input);
     document.getElementById('persons').appendChild(label);
     document.getElementById('persons').appendChild(br);
-
 }
 
 function users() {
   var xhr1 = new XMLHttpRequest();
   xhr1.open('POST', 'groupUserFetch.php', true);
   xhr1.setRequestHeader('content-type', 'application/x-www-form-urlencoded');
-  xhr1.send('activ_user=' + document.getElementById('user').dataset.user  + '&already_fetched=' + document.getElementById('persons').innerText);
+  xhr1.send('activ_user=' + document.getElementById('user').dataset.user  
+            + '&already_fetched=' + document.getElementById('persons').innerText);
   xhr1.onload = function() {
-    // alert(xhr.responseText);
-    
     if (xhr1.responseText) {
         let values = xhr1.responseText.split(";");
         values.pop();
         values.forEach(insert_users);
     }
-    
   }
 }
 </script>
-
 <head>
     <meta charset="UTF-8">
     <link id="pagestyle" rel="stylesheet" href="styles_dark.css" />
@@ -70,10 +62,10 @@ function users() {
   <a href="practice.php">Chat</a>
 
   <div class="darkmode_button">
-    <input type="checkbox" id="darkmode" name="darkmode" value="darkmode" oninput="setDarkmodeCookie()" checked>
+    <input type="checkbox" id="darkmode" name="darkmode" value="darkmode" 
+            oninput="setDarkmodeCookie()" checked>
     <label for="darkmode"> Enable Darkmode</label>
-  </div>
-        
+  </div>    
 </div>
 
 <div> 

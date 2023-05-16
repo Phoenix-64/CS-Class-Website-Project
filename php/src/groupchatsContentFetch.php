@@ -1,6 +1,4 @@
 <?php
-
-
 function groupchatContent($active_user_result)
 {
     include 'config.php';
@@ -12,7 +10,8 @@ function groupchatContent($active_user_result)
     }
 
     $active_user_name = $active_user_result["user_name"];
-    $update           = mysqli_query($conn, "UPDATE `$chat_name` SET `read`= TRUE WHERE `chat_person_name` != '$active_user_name'");
+    $update           = mysqli_query($conn, "UPDATE `$chat_name` SET 
+                    `read`= TRUE WHERE `chat_person_name` != '$active_user_name'");
 
     // Select all chat records from the 'chat' table
     $result = mysqli_query($conn, "SELECT * FROM `$chat_name`");
@@ -48,14 +47,15 @@ function groupchatContent($active_user_result)
         case 2:
             // key
             echo "key1241242:$chat_name:$message";
-            $remove = mysqli_query($conn, "DELETE FROM `$chat_name` WHERE `message_type` = 2");
+            $remove = mysqli_query($conn, "DELETE FROM `$chat_name` 
+                                            WHERE `message_type` = 2");
             break;
         case 3:
             // iv
             echo "iv1241242:$chat_name:$message";
-            $remove = mysqli_query($conn, "DELETE FROM `$chat_name` WHERE `message_type` = 3");
+            $remove = mysqli_query($conn, "DELETE FROM `$chat_name` 
+                                            WHERE `message_type` = 3");
             break;
         }
     }//end while
-
 }//end groupchatContent()
