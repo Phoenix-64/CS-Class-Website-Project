@@ -7,7 +7,7 @@ if (isset($_SESSION["email"])) {
     $stmt->bind_param("s", $_SESSION["email"]);
     $stmt->execute();
     session_destroy();
-}
+} 
 ?>
 <!DOCTYPE html>
 <html lang="en">

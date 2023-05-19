@@ -30,6 +30,7 @@ function groupchatContent($active_user_result)
         $user_row = $user->fetch_assoc();
         $color    = $user_row['user_color'];
 
+
         $align = "left";
         if ($name == $active_user_result["user_name"]) {
             $align = "right";
@@ -38,23 +39,31 @@ function groupchatContent($active_user_result)
         // Print the name and message
         switch ($row['message_type']) {
         case 0:
-            echo "$color;$align;$time;$name;$message;$read:::";
+            echo "msg-!-$color;$align;$time;$name;$message;$read:::";
             break;
         case 1:
             $file_name = $row['image_file'];
-            echo "$color;$align;$time;$name;$message;$read;$file_name:::";
+            echo "msg-!-$color;$align;$time;$name;$message;$read;$file_name:::";
             break;
         case 2:
+            $target_user = explode(";", $message)[0];
+            $string = explode(";", $message)[1];
             // key
-            echo "key1241242:$chat_name:$message";
-            $remove = mysqli_query($conn, "DELETE FROM `$chat_name` 
-                                            WHERE `message_type` = 2");
+            if ($target_user == $active_user_result["user_id"]) {
+                echo "key1241242:$chat_name:$string:::";
+                $remove = mysqli_query($conn, "DELETE FROM `$chat_name` 
+                                        WHERE `message_type` = 2 AND `chat_value` = '$message'");
+            }
             break;
         case 3:
+            $target_user = explode(";", $message)[0];
+            $string = explode(";", $message)[1];
             // iv
-            echo "iv1241242:$chat_name:$message";
-            $remove = mysqli_query($conn, "DELETE FROM `$chat_name` 
-                                            WHERE `message_type` = 3");
+            if ($target_user == $active_user_result["user_id"]) {
+                echo "iv1241242:$chat_name:$string:::";
+                $remove = mysqli_query($conn, "DELETE FROM `$chat_name` 
+                                        WHERE `message_type` = 3  AND `chat_value` = '$message'");
+            }
             break;
         }
     }//end while

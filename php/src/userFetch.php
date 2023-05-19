@@ -11,7 +11,6 @@ $stmt->execute();
 $result_current = $stmt->get_result();
 $current_user   = $result_current->fetch_assoc();
 
-
 $active_chat = $current_user['active_chat'];
 // Fetch availabel chats and requests that other users made to the active ones
 $availabel_chats     = explode(";", $current_user['availabel_chats']);
@@ -32,6 +31,12 @@ while ($row = mysqli_fetch_assoc($result)) {
 
     if (str_contains($_POST["already_fetched"], $row['user_name'])) {
         continue;
+    }
+    if ($requests == null ) {
+        $requests = "asldfkjaeoifjn3kaösdfj";
+    }
+    if ($requests_for_active == null) {
+        $requests_for_active = "adlfjaeoijfol4joawijef";
     }
 
     echo("::".$user_id.";".$row['user_name']);
@@ -75,7 +80,8 @@ while ($row = mysqli_fetch_assoc($result)) {
         else {
             echo ";8";
         }
-    } else {
+    } 
+    else {
         // Check if user is Online
         if ($row['user_status'] == 1) {
             echo ";9";

@@ -16,10 +16,10 @@ if (isset($_POST['requested_user'])) {
   $query        = "CREATE TABLE IF NOT EXISTS `$chat_name_id` (
       `chat_id` INT(11) NOT NULL AUTO_INCREMENT,
       `chat_person_name` varchar(100) NOT NULL,
-      `chat_value` varchar(100) NOT NULL,
+      `chat_value` text NOT NULL,
       `chat_time` time DEFAULT NULL,
       `message_type` INT(11) NOT NULL DEFAULT 0,
-      `image_file` varchar(100) NOT NULL,
+      `image_file` text DEFAULT NULL,
       `read`  BOOLEAN NOT NULL DEFAULT FALSE,
       PRIMARY KEY (`chat_id`)
     ) ENGINE=InnoDB DEFAULT CHARSET=latin1;";

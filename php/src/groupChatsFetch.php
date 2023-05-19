@@ -11,7 +11,6 @@ $result_current      = $stmt->get_result();
 $current_user        = $result_current->fetch_assoc();
 $requests_for_active = $current_user['requests'];
 
-
 // Fetch availabel chats and requests that other users made to the active ones
 // If array is NULL initialize to [];
 while ($row = mysqli_fetch_assoc($result)) {
@@ -27,11 +26,17 @@ while ($row = mysqli_fetch_assoc($result)) {
         !str_contains($requests_for_active, ";"."group_chat-".$row["groupchat_id"])) {
         continue;
     }
+    if ($requests_for_active == null ) {
+        $requests_for_active = "asldfkjaeoifjn3kaösdfj";
+    }
+    if ($groupchat_users == null ) {
+        $groupchat_users = "asldfkjaeoifjn3kaösdfj";
+    }
 
     echo("::".$group_id."##".$row['groupchat_name']."##".$row["groupchat_Npublic"]);
 
     $open_N_requests = $row["groupchat_Npublic"];
-    if (!empty($open_N_requests)) {
+    if (!empty($open_N_requests) && $row['groupchat_creator'] == $active_user) {
         echo ("##1");
     } else {
         echo("##0");

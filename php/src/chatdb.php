@@ -30,15 +30,10 @@ if (!$_POST['chat'] == null) {
     }
 
     // Insert the new chat message into the database
-    $result = mysqli_query(
-        $conn,
-        "INSERT INTO `$chat_name_id` 
-        (`chat_id`, `chat_person_name`, `chat_value`, `chat_time`)
-        VALUES (NULL, '$_SESSION[name]', '$_POST[chat]', NOW())"
-    );
-    $stmt   = $db->prepare("INSERT INTO $chat_name_id 
+
+    $stmt   = $db->prepare("INSERT INTO `$chat_name_id` 
                             (chat_id, chat_person_name, chat_value, chat_time) 
                             VALUES (NULL,?,?,NOW())");
-    $stmt->bind_param("ss", $_SESSION["name"], $_post["chat"]);
+    $stmt->bind_param("ss", $_SESSION["name"], $_POST["chat"]);
     $stmt->execute();
 }//end if

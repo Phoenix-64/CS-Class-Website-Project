@@ -20,7 +20,6 @@ body {
   background-color: #333;
 }
 
-
 #navbar a {
   display: block;
   text-align: center;
@@ -29,8 +28,6 @@ body {
   color: white;
   float: left;
 }
-
-
 
 li a:hover {
 background-color: #111;
@@ -53,10 +50,7 @@ background-color: #111;
   background-color: #111;
 }
 
-
-
 h1 {
-
   margin-block-start: 0px;
   margin-block-end: 0px;
   padding-top: 0.2em;
@@ -97,7 +91,6 @@ iframe {
     max-height: 1500px;
   }
 }
-
 
 .container {
 display: grid;
@@ -151,11 +144,6 @@ height: max-content;
 
 }
 
-
-
-
-
-
 /* The sticky class is added to the navbar with JS when it reaches its scroll position */
 .sticky {
 position: fixed;
@@ -163,11 +151,11 @@ top: 0;
 width: 100%;
 }
 
-/* Add some top padding to the page content to prevent sudden quick movement (as the navigation bar gets a new position at the top of the page (position:fixed and top:0) */
+/* Add some top padding to the page content to prevent sudden quick movement (
+  as the navigation bar gets a new position at the top of the page (position:fixed and top:0) */
 .sticky + .container {
   padding-top: 3.8em;
   }
-
 
 table {
 text-align: left;

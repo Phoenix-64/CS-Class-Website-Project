@@ -8,8 +8,7 @@ require_once 'config.php';
 if (isset($_POST['activ_user'])) {
   echo("declined activated");
   $active_user   = $_POST['activ_user'];
-  $declined_user = $_POST['declined_user'];
-  $N_public = $_POST['N_public'];
+  $declined_group = $_POST['declined_user'];
 
   $stmt = $db->prepare("SELECT * FROM user WHERE user_id = ?");
   $stmt->bind_param("i", $active_user);
@@ -20,7 +19,7 @@ if (isset($_POST['activ_user'])) {
   $current_request = $result['requests'];
   echo($current_request);
   echo("CurrentRequests");
-  $new_requests = str_replace(";".$declined_user.":".$N_public, "", $current_request);
+  $new_requests = str_replace(";group_chat".$declined_group.":0", "", $current_request);
   // Update users requests and add to availabel chats
   $update = mysqli_query(
       $conn,

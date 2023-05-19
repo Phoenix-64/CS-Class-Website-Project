@@ -102,8 +102,8 @@ CREATE TABLE IF NOT EXISTS`tokens` (
 CREATE TABLE IF NOT EXISTS`groupchats` (
   `groupchat_id` INT NOT NULL AUTO_INCREMENT, 
   `groupchat_name` VARCHAR(100) NOT NULL , 
-  `groupchat_Npublic` TEXT NOT NULL , 
-  `groupchat_users` TEXT NOT NULL , 
+  `groupchat_Npublic` TEXT DEFAULT NULL , 
+  `groupchat_users` TEXT DEFAULT NULL , 
   `groupchat_creator` int(11) NOT NULL , 
   PRIMARY KEY (`groupchat_id`)
   ) ENGINE = InnoDB DEFAULT CHARSET=latin1; 

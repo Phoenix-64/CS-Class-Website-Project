@@ -51,6 +51,7 @@ while ($row = mysqli_fetch_assoc($result)) {
     $user     = $stmt->get_result();
     $user_row = $user->fetch_assoc();
     $color    = $user_row['user_color'];
+    $user_id = $user_row['user_id'];
 
     $align = "left";
     if ($name == $active_user_result["user_name"]) {
@@ -60,23 +61,27 @@ while ($row = mysqli_fetch_assoc($result)) {
     // Print the name and message
     switch ($row['message_type']) {
     case 0:
-        echo "$color;$align;$time;$name;$message;$read:::";
+        echo "msg-!-$color;$align;$time;$name;$message;$read:::";
         break;
     case 1:
         $file_name = $row['image_file'];
-        echo "$color;$align;$time;$name;$message;$read;$file_name:::";
+        echo "msg-!-$color;$align;$time;$name;$message;$read;$file_name:::";
         break;
     case 2:
         // key
-        echo "key1241242:$chat_name_id:$message";
-        $remove = mysqli_query($conn, "DELETE FROM `$chat_name_id` 
+        if ($name != $active_user_result["user_name"]) {
+            echo "key1241242:$chat_name_id:$message:::";
+            $remove = mysqli_query($conn, "DELETE FROM `$chat_name_id` 
                                         WHERE `message_type` = 2");
+        }
         break;
     case 3:
         // iv
-        echo "iv1241242:$chat_name_id:$message";
-        $remove = mysqli_query($conn, "DELETE FROM `$chat_name_id` 
+        if ($name != $active_user_result["user_name"]) {
+            echo "iv1241242:$chat_name_id:$message:::";
+            $remove = mysqli_query($conn, "DELETE FROM `$chat_name_id` 
                                         WHERE `message_type` = 3");
+        }
         break;
     }
 }//end while

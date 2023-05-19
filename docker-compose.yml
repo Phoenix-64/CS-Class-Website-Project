@@ -9,6 +9,7 @@ services:
             - db
         volumes:
             - ./php/src:/var/www/html/
+            - ./php/php.ini:/usr/local/etc/php/php.ini
         ports:
             - 8000:80
     db:

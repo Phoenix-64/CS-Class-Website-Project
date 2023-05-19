@@ -1,5 +1,3 @@
-<!DOCTYPE html>
-<html lang="en">
 <?php
 session_start();
 require_once 'config.php';
@@ -9,14 +7,15 @@ if (isset($_GET['logout'])) {
     $stmt->bind_param("s", $_SESSION["email"]);
     $stmt->execute();
     session_destroy();
-    header('location: practice.php?logout_successfully= 
-          <span style="color:green">You have successfully Logged Out.</span>');
+    header('location: practice.php?logout_successfully=<span style="color:green">You have successfully Logged Out.</span>');
 }
 
 if (isset($_GET['create_group'])) {
     header('location: create_group.php');
 }
 ?>
+<!DOCTYPE html>
+<html lang="en">
 <script src="RSA_PRogramm/ras_example.js"></script>
 <script src="chacha-js/chacha.js"></script>
 <script>
@@ -105,7 +104,7 @@ if (isset($_GET['create_group'])) {
     let activ_user = document.getElementById('user').dataset.user;
     let requested_user = element.dataset.user;
     let chat_id = "" + activ_user + requested_user;
-    if (activ_user > requested_user) {
+    if (Number(activ_user) > Number(requested_user)) {
       chat_id = "" + requested_user + activ_user;
     }
 
@@ -155,7 +154,7 @@ if (isset($_GET['create_group'])) {
     let activ_user = document.getElementById('user').dataset.user;
     let requested_user = element.dataset.user;
     let chat_id = "" + activ_user + requested_user;
-    if (activ_user > requested_user) {
+    if (Number(activ_user) > Number(requested_user)) {
       chat_id = "" + requested_user + activ_user;
     }
 
@@ -204,8 +203,29 @@ if (isset($_GET['create_group'])) {
 
   function declineRequest(element) {
     element.style.backgroundColor = "red";
+    var N_public 
+    var xhr1 = new XMLHttpRequest();
+    xhr1.open('POST', 'getKeys.php', false);
+    xhr1.setRequestHeader('content-type', 'application/x-www-form-urlencoded');
+    xhr1.send('activ_user=' + document.getElementById('user').dataset.user 
+            + '&accepted_user=' + element.dataset.user);
+    N_public = BigInt(xhr1.responseText)
+
     var xhr = new XMLHttpRequest();
     xhr.open('POST', 'declineChat.php', true);
+    xhr.setRequestHeader('content-type', 'application/x-www-form-urlencoded');
+    xhr.send('activ_user=' + document.getElementById('user').dataset.user 
+              + '&declined_user=' + element.dataset.user + '&N_public=' + N_public);
+    xhr.onload = function() {
+      console.log(xhr.responseText); 
+      document.getElementById('loginperson').innerText = "";
+    }
+  }
+
+  function declineGroupRequest(element) {
+    element.style.backgroundColor = "red";
+    var xhr = new XMLHttpRequest();
+    xhr.open('POST', 'declineGroupChat.php', true);
     xhr.setRequestHeader('content-type', 'application/x-www-form-urlencoded');
     xhr.send('activ_user=' + document.getElementById('user').dataset.user 
               + '&declined_user=' + element.dataset.user);
@@ -235,11 +255,11 @@ if (isset($_GET['create_group'])) {
   }
 
   function decrypt_rsa(chat_id, msg) {
-    let d = localStorage.getItem(chat_id + "d");
-    let N_Public = localStorage.getItem(chat_id + "N");
+    var d = localStorage.getItem(chat_id + "d");
+    var N_Public = localStorage.getItem(chat_id + "N");
     for (i in msg) {
-      msg[i] = power(BigInt(msg[i]), d, N_public);
-      msg[i] = Number(msg[i].toString().split(pad_seperator)[0]);
+      msg[i] = power(BigInt(msg[i]), BigInt(d), BigInt(N_Public));
+      msg[i] = msg[i].toString().split(pad_seperator)[0];
     }
     return msg;
   }
@@ -251,7 +271,7 @@ if (isset($_GET['create_group'])) {
     let activ_user = document.getElementById('user').dataset.user;
     let requested_user = document.getElementById('user').dataset.activ;
     var chat_id = "" + activ_user + requested_user;
-    if (activ_user > requested_user) {
+    if (Number(activ_user) > Number(requested_user)) {
       chat_id = "" + requested_user + activ_user;
     }
     if (requested_user < 0) {
@@ -279,7 +299,7 @@ if (isset($_GET['create_group'])) {
     let activ_user = document.getElementById('user').dataset.user;
     let requested_user = document.getElementById('user').dataset.activ;
     var chat_id = "" + activ_user + requested_user;
-    if (activ_user > requested_user) {
+    if (Number(activ_user) > Number(requested_user)) {
       chat_id = "" + requested_user + activ_user ;
     }
     if (requested_user < 0) {
@@ -304,19 +324,19 @@ if (isset($_GET['create_group'])) {
           }
 
           if(respons.includes("key1241242:")) {
-            let key = respons.split(":")[2];
-            let save_name = respons.split(":")[1];
-            key = JSON.parse(key);
-            key = decrypt_rsa(save_name, key);
-            localStorage.setItem(chat_id + "key", JSON.stringify(key));
+            let keys = respons.split(":")[2];
+            let chat_name_id = respons.split(":")[1]
+            keys = JSON.parse(keys);
+            keys = decrypt_rsa(chat_name_id, keys);
+            localStorage.setItem(chat_name_id + "key", keys);
           }
 
           else if(respons.includes("iv1241242:")) {
-            let iv = respons.split(":")[2];
-            let save_name = respons.split(":")[1];
-            iv = JSON.parse(iv);
-            iv = decrypt_rsa(save_name, iv);
-            localStorage.setItem(save_name + "iv", JSON.stringify(iv));
+            let ivs = respons.split(":")[2];
+            let chat_name_id = respons.split(":")[1]
+            ivs = JSON.parse(ivs);
+            ivs = decrypt_rsa(chat_name_id, ivs);
+            localStorage.setItem(chat_name_id + "iv", ivs);
             }
 
           else if(respons.includes("Select or request a Chat")) {
@@ -326,7 +346,8 @@ if (isset($_GET['create_group'])) {
                                     send you the keys by loging in himself.";
             }
 
-          else {
+          else if (respons.includes("msg-!-")){
+            respons = respons.replace("msg-!-", "")
             respons = respons.split(";");
             msg = respons[4];
             if (respons.length == 7){
@@ -372,7 +393,7 @@ if (isset($_GET['create_group'])) {
     let activ_user = document.getElementById('user').dataset.user;
     let requested_user = document.getElementById('user').dataset.activ;
     var chat_id = "" + activ_user + requested_user;
-    if (activ_user > requested_user) {
+    if (Number(activ_user) > Number(requested_user)) {
       chat_id = "" + requested_user + activ_user;
     }
     if (requested_user < 0) {
@@ -396,12 +417,8 @@ if (isset($_GET['create_group'])) {
   setInterval(setText, 500);
   setInterval(users, 500);
 
-  function insert_users(value, index, array) {
+  function insert_users(new_div, value) {
     let values = value.split(";");
-    if (document.getElementById('loginperson').innerText.includes(values[1])) {
-      continue;
-    }
-
     let div = document.createElement('div');
     let p = document.createElement('span');
     let button = document.createElement('button');
@@ -480,14 +497,11 @@ if (isset($_GET['create_group'])) {
           div.appendChild(button);
           break;  
       }
-    document.getElementById('loginperson').appendChild(div);
+      new_div.appendChild(div);
   }
 
-  function insert_groupchats(value, index, array) {
+  function insert_groupchats(new_div, value) {
     let values = value.split("##");
-    if (document.getElementById('loginperson').innerText.includes(values[1])) {
-      continue;
-    }
     if (values[3] == "1") {
       fullfillNRequest(values[2], values[0]);
     }
@@ -510,7 +524,7 @@ if (isset($_GET['create_group'])) {
         button.onclick = function() {acceptGroupRequest(this);};
         button.innerText = "Accept Request";
         div.appendChild(button);
-        button1.onclick = function() {declineRequest(this);};
+        button1.onclick = function() {declineGroupRequest(this);};
         button1.innerText = "Decline Request";
         div.appendChild(button1);
         break;
@@ -527,12 +541,16 @@ if (isset($_GET['create_group'])) {
       case 3:
         break;
     }
-    document.getElementById('loginperson').appendChild(div);
+    new_div.appendChild(div);
   }
 
   function users() {
-    let text = (document.getElementById('loginperson').innerText
-                .replace(/(\r\n|\n|\r)/gm, ""));
+    
+
+
+    var text = (document.getElementById('loginperson').innerText
+               .replace(/(\r\n|\n|\r)/gm, ""));
+    text = "";
     var xhr1 = new XMLHttpRequest();
     xhr1.open('POST', 'userFetch.php', true);
     xhr1.setRequestHeader('content-type', 'application/x-www-form-urlencoded');
@@ -540,10 +558,18 @@ if (isset($_GET['create_group'])) {
               + '&already_fetched=' + text);
     xhr1.onload = function() {
       if (xhr1.responseText) {
+        let loginperson_usr = document.getElementById('loginperson_usr');
+        var usr_new = document.createElement('div');
+        usr_new.id = "loginperson_usr";
         let values = xhr1.responseText.split("::");
         values.shift();
-        values.forEach(insert_users);
-        console.log("Called once");
+        values.forEach(function (value) {insert_users(usr_new, value)});
+        if (usr_new != loginperson_usr && loginperson_usr != null) {
+          document.getElementById('loginperson_usr').replaceWith(usr_new);
+        }
+        else if (loginperson_usr == null) {
+          document.getElementById('loginperson').appendChild(usr_new);
+        }
       }
     }
 
@@ -554,9 +580,18 @@ if (isset($_GET['create_group'])) {
               + '&already_fetched=' + text);
     xhr2.onload = function() { 
       if (xhr2.responseText) {
+        let loginperson_groups = document.getElementById('loginperson_groups');
+        var groups_new = document.createElement('div');
+        groups_new.id = "loginperson_groups";
         let values = xhr2.responseText.split("::");
         values.shift();
-        values.forEach(insert_groupchats);
+        values.forEach(function (value) {insert_groupchats(groups_new, value)});
+        if (groups_new != loginperson_groups && loginperson_groups != null) {
+          document.getElementById('loginperson_groups').replaceWith(groups_new);
+        }
+        else if (loginperson_groups == null) {
+          document.getElementById('loginperson').appendChild(groups_new);
+        }
       }
       }
   }
@@ -646,7 +681,10 @@ if (isset($_GET['create_group'])) {
       </script>
     </div>
   </div>
-  <div id="loginperson"> </div>
+  <div id="loginperson"> 
+    <div id="loginperson_usr"></div>
+    <div id="loginperson_groups"></div>
+  </div>
 </div>
 <div><hr></div>
 <?php

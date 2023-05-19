@@ -60,19 +60,19 @@ if (isset($_POST['activ_user']) === TRUE) {
                                                 $accepted_user.$active_user);
   }
 
-    echo("$chat_name_id");
+  echo("$chat_name_id");
 
-    $query  = "CREATE TABLE IF NOT EXISTS `$chat_name_id` (
-      `chat_id` INT(11) NOT NULL AUTO_INCREMENT,
-      `chat_person_name` varchar(100) NOT NULL,
-      `chat_value` varchar(100) NOT NULL,
-      `chat_time` time DEFAULT NULL,
-      `message_type` INT(11) NOT NULL DEFAULT 0,
-      `image_file` varchar(100) NOT NULL,
-      `read`  BOOLEAN NOT NULL DEFAULT FALSE,
-      PRIMARY KEY (`chat_id`)
-    ) ENGINE=InnoDB DEFAULT CHARSET=latin1;";
-    $result = mysqli_query($conn, $query);
+  $query  = "CREATE TABLE IF NOT EXISTS `$chat_name_id` (
+    `chat_id` INT(11) NOT NULL AUTO_INCREMENT,
+    `chat_person_name` varchar(100) NOT NULL,
+    `chat_value` text NOT NULL,
+    `chat_time` time DEFAULT NULL,
+    `message_type` INT(11) NOT NULL DEFAULT 0,
+    `image_file` varchar(100) DEFAULT NULL,
+    `read`  BOOLEAN NOT NULL DEFAULT FALSE,
+    PRIMARY KEY (`chat_id`)
+  ) ENGINE=InnoDB DEFAULT CHARSET=latin1;";
+  $result = mysqli_query($conn, $query);
 
     // set first message to iv and key
   $stmt = $db->prepare(

@@ -46,8 +46,8 @@ $mail->setOAuth(
 
 function generateRandomString($length=10)
 {
-    $characters       = '0123456789abcdefghijklmnopqrstu
-                        vwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+    $characters       = '0123456789abcdefghijklmnopqrstu' .
+                        'vwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
     $charactersLength = strlen($characters);
     $randomString     = '';
     for ($i = 0; $i < $length; $i++) {
@@ -79,17 +79,18 @@ $mail->setFrom($clientemail, 'Pheonixes Website Emailer');
 $mail->addAddress($new_user_email, $new_user_name);
 $mail->isHTML(true);
 $mail->Subject = 'Phoenixes Website Email Verification';
-$mail->Body    = "<b>To verify your email and be able to login click the following 
-                <a href='https://localhost:8000/verify_email.php?email=$user_email
-                &string=$user_verify_string'>link. </a></b>";
+$mail->Body    = "<b>To verify your email and be able to login click the following " . 
+                "<a href='localhost:8000/verify_email.php?email=$new_user_email" .
+                "&string=$user_verify_string'>link.</a> localhost:8000/verify_email.php?" .
+                "email=$new_user_email&string=$user_verify_string</b>";
 
 // Check if the insert was successful
-if ($stmt->errno == 0 && $email->send()) {
+if ($stmt->errno == 0 && $mail->send()) {
     // If the insert was successful, redirect to the login page with a success message
     header(
-        "location: practice.php?registeration_successfull=<span style='color:green'>
-        You have successfully registered. You need to verify your email bevor you 
-        can login, you should have recieved a email.</span>"
+        "location: practice.php?registeration_successfull=<span style='color:green'>" .
+        "You have successfully registered. You need to verify your email bevor you" .
+        "can login, you should have recieved a email.</span>"
     );
 } else {
       // If the insert failed, print an error message

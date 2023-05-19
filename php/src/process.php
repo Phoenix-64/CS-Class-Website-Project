@@ -21,21 +21,18 @@ $verified      = $row['verified'];
 
 if (!$verified) {
     header(
-        'location: practice.php?login_error=<span style="color:red">
-        Your email is not yet verified you should have reciewd an email if not 
-        contact the developer.</span>'
+        'location: practice.php?login_error=<span style="color:red">Your email is not yet verified you should have reciewd an email if not contact the developer.</span>'
     );
+    die();
 }
 
 // Check if a user was found
 if ($result->num_rows > 0 && $user_password === $password_hash) {
     // If a user was found and password is corect, set session variables and 
     // redirect to the chatroom
-    echo "success";
     $_SESSION['email']    = $user_email;
     $_SESSION['password'] = $password_hash;
     $_SESSION['name']     = $name;
-
     // Update the user's status to "online"
     $query = mysqli_query(
         $conn,
@@ -48,14 +45,7 @@ if ($result->num_rows > 0 && $user_password === $password_hash) {
 } else {
     // If no user was found or password is incorect, redirect back to the login 
     // page with an error message
-    echo "failed";
     header(
-        'location: practice.php?login_error=<span style="color:red">
-        Username or password is wrong</span><form method="post" 
-        action="request_pw_reset.php"><table><tr><td>Email : </td><td>
-        <input type="email" name="email"  /></td></tr>
-        <tr><td colspan="2"><center> 
-        <input type="submit" name="pwresetbtn" value="Reset Password" /></td></tr>
-        </table></form> '
+        'location: practice.php?login_error=<span style="color:red">Username or password is wrong</span><form method="post" action="request_pw_reset.php"><table><tr><td>Email : </td><td><input type="email" name="email"  /></td></tr><tr><td colspan="2"><center> <input type="submit" name="pwresetbtn" value="Reset Password" /></td></tr></table></form> '
     );
 }//end if

@@ -49,7 +49,7 @@ if (isset($_GET['email']) && isset($_GET['string'])) {
   if ($saved_string !== $string) {
       echo("Your provided string is not valid");
   } else {
-      $stmt = $conn->prepare("UPDATE user SET pw_reset=`` 
+      $stmt = $conn->prepare("UPDATE user SET pw_reset='', 
                         verified=TRUE WHERE user_email=?");
       $stmt->bind_param("s", $email);
       $stmt->execute();
