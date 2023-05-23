@@ -72,7 +72,7 @@ $mail->setFrom($clientemail, 'Pheonixes Website Emailer');
 $mail->addAddress($user_email, 'The User');
 $mail->isHTML(true);
 $mail->Subject = 'Phoenixes Website password reset';
-$mail->Body    = "<b>If you requested the <a href='localhost:8000/pw_reset.php?email=$user_email&string=$user_reset_string'>link</a> proced with the password reset otherwise disregard it. localhost:8000/pw_reset.php?email=$user_email&string=$user_reset_string</b>";
+$mail->Body    = "<p>If you requested the <a href='https://bepi-cs-webapp.herokuapp.com/pw_reset.php?email=$user_email&string=$user_reset_string'>link</a> proced with the password reset otherwise disregard it.</p><p> https://bepi-cs-webapp.herokuapp.com/pw_reset.php?email=$user_email&string=$user_reset_string</b>";
 
 // send the message, check for errors
 if (!$mail->send()) {

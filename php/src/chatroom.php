@@ -203,7 +203,7 @@ if (isset($_GET['create_group'])) {
 
   function declineRequest(element) {
     element.style.backgroundColor = "red";
-    var N_public 
+    var N_public
     var xhr1 = new XMLHttpRequest();
     xhr1.open('POST', 'getKeys.php', false);
     xhr1.setRequestHeader('content-type', 'application/x-www-form-urlencoded');
@@ -414,8 +414,8 @@ if (isset($_GET['create_group'])) {
     return true;
   }
 
-  setInterval(setText, 500);
-  setInterval(users, 500);
+  setInterval(setText, 2000);
+  setInterval(users, 2000);
 
   function insert_users(new_div, value) {
     let values = value.split(";");
@@ -598,6 +598,7 @@ if (isset($_GET['create_group'])) {
 </script>
 <head>
     <meta charset="UTF-8">
+    <link rel="shortcut icon" href="#">
     <link id="pagestyle" rel="stylesheet" href="styles_dark.css" />
     <link id="pagestyle" rel="stylesheet" href="chat_style.css" />
     <script type="text/javascript" src="sticky_navbar.js"></script>

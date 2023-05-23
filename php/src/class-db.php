@@ -1,10 +1,10 @@
 <?php
 class DB
 {
-    private $_dbHost = "db";
-    private $_dbUsername = "admin";
-    private $_dbPassword = "1234";
-    private $_dbName = "ajaxdb";
+    private $_dbHost = "eu-cdbr-west-03.cleardb.net";
+    private $_dbUsername = "b184e3169ac116";
+    private $_dbPassword = "6ef24284";
+    private $_dbName = "heroku_7214bac1573c3e8";
     
     public function __construct()
     {

@@ -34,10 +34,6 @@ if ($result->num_rows > 0 && $user_password === $password_hash) {
     $_SESSION['password'] = $password_hash;
     $_SESSION['name']     = $name;
     // Update the user's status to "online"
-    $query = mysqli_query(
-        $conn,
-        "UPDATE user SET user_status='1' WHERE user_email='$user_email'"
-    );
     $stmt  = $conn->prepare("UPDATE user SET user_status='1' WHERE user_email=?");
     $stmt->bind_param("s", $user_email);
     $stmt->execute();

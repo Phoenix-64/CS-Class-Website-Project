@@ -14,6 +14,7 @@ if (isset($_SESSION["email"])) {
 
 <head>
     <meta charset="UTF-8">
+    <link rel="shortcut icon" href="#">
     <link id="pagestyle" rel="stylesheet" href="styles_dark.css" />
     <script type="text/javascript" src="sticky_navbar.js"></script>
     <script type="text/javascript" src="darkmode_cookie.js"></script>

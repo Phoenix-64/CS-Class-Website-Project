@@ -164,6 +164,7 @@ function setHashed() {
 <!-- styling and navbar -->
 <head>
     <meta charset="UTF-8">
+    <link rel="shortcut icon" href="#">
     <link id="pagestyle" rel="stylesheet" href="styles_dark.css" />
     <script type="text/javascript" src="sticky_navbar.js"></script>
     <script type="text/javascript" src="darkmode_cookie.js"></script>
@@ -230,7 +231,7 @@ if (!$result) {
 </select></td><td><div id="city_display"></div>
 </td></tr><tr>
 
-<td>Farbe in Hex: </td><td><input type="text" name="color" id="color" onblur="validate(this.value)"/></td><td> <!-- Farbe wird nicht richtig gespeichert -->
+<td>Farbe in Hex (#123456): </td><td><input type="text" name="color" id="color" onblur="validate(this.value)" value="#"/></td><td> <!-- Farbe wird nicht richtig gespeichert -->
 <div id="cnfrmcol"></div></td></tr><tr>
 
 <td>Password : </td><td><input type="password" name="pass1" id="pass1" onblur="validate()" /></td></tr><tr>

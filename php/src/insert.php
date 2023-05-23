@@ -79,10 +79,10 @@ $mail->setFrom($clientemail, 'Pheonixes Website Emailer');
 $mail->addAddress($new_user_email, $new_user_name);
 $mail->isHTML(true);
 $mail->Subject = 'Phoenixes Website Email Verification';
-$mail->Body    = "<b>To verify your email and be able to login click the following " . 
-                "<a href='localhost:8000/verify_email.php?email=$new_user_email" .
-                "&string=$user_verify_string'>link.</a> localhost:8000/verify_email.php?" .
-                "email=$new_user_email&string=$user_verify_string</b>";
+$mail->Body    = "<p>To verify your email and be able to login click the following " . 
+                "<a href='https://bepi-cs-webapp.herokuapp.com/verify_email.php?email=$new_user_email" .
+                "&string=$user_verify_string'>link.</a></p><p> https://bepi-cs-webapp.herokuapp.com/verify_email.php?" .
+                "email=$new_user_email&string=$user_verify_string</p>";
 
 // Check if the insert was successful
 if ($stmt->errno == 0 && $mail->send()) {

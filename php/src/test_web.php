@@ -2,6 +2,7 @@
 $activ_user = "8";
 $active_chat_id = "10";
 
+phpinfo();
 if ($activ_user < $active_chat_id) {
     echo $activ_user.$active_chat_id;
 } else {

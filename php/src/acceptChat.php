@@ -68,7 +68,7 @@ if (isset($_POST['activ_user']) === TRUE) {
     `chat_value` text NOT NULL,
     `chat_time` time DEFAULT NULL,
     `message_type` INT(11) NOT NULL DEFAULT 0,
-    `image_file` varchar(100) DEFAULT NULL,
+    `image_file` text DEFAULT NULL,
     `read`  BOOLEAN NOT NULL DEFAULT FALSE,
     PRIMARY KEY (`chat_id`)
   ) ENGINE=InnoDB DEFAULT CHARSET=latin1;";

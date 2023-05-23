@@ -53,8 +53,10 @@ if (isset($_GET['email']) && isset($_GET['string'])) {
                         verified=TRUE WHERE user_email=?");
       $stmt->bind_param("s", $email);
       $stmt->execute();
-      echo ("Your email is now verified you can now log in thank you and have fun.");
-  }
+      header(
+        'location: practice.php?login_error=<span style="color:green">Your email is now verified you can now log in thank you and have fun. </span>'
+      );
+    }
 } else {
     echo("No string and Email given");
 }//end if

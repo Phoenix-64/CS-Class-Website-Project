@@ -79,7 +79,7 @@ if (!in_array($providerName, ['Google', 'Microsoft', 'Yahoo'])) {
 // These details are obtained by setting up an app in the Google developer console,
 // or whichever provider you're using.
 // If this automatic URL doesn't work, set it yourself manually to the URL of this script
-$redirectUri = (isset($_SERVER['HTTPS']) ? 'https://' : 'http://').$_SERVER['HTTP_HOST'].$_SERVER['PHP_SELF'];
+$redirectUri = "https://bepi-cs-webapp.herokuapp.com/get_oauth_token.php";
 // $redirectUri = 'http://localhost/PHPMailer/redirect';
 $params = [
     'clientId'     => $clientId,
@@ -136,6 +136,7 @@ if (!isset($_GET['code'])) {
             'code' => $_GET['code'],
         ]
     );
+
     // Use this to interact with an API on the users behalf
     // Use this to get a new access token if the old one expires
     // echo 'Refresh Token: ', $token->getRefreshToken();
